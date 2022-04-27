@@ -224,25 +224,37 @@ def normalize(s): # 콤마 없애주세요 흑흑 ※
 
 
 # 여기서부터 실제 코드!
+past_data = False     # 하루만 돌리고 싶거든 사용합시다
 hyoo_gaa = 0       # 휴가 다녀왔으면 숫자 바꾸기
-today = date.today()
-# today = date(2022, 4, 18)     # 특정 날짜 돌리고 싶으면 여기를... 근데 하루이틀만 돌리는건 안되넹.. 어케하지?
-yy = today.year
-mm = today.month
-dd = today.day
-wkday = today.weekday()
-print('yy:', yy, 'mm:', mm, 'dd:', dd, 'wkday:', wkday)
 
-if(wkday == 0): # 만약 오늘이 월요일이면?
-    print('월요일이에요!')
-    dd = dd - 3 - hyoo_gaa        # 3일전으로 돌아가(금) - 휴가일자추가
-    days_to_go = 2 + hyoo_gaa     # 이틀 돌릴거야 + 휴가일자추가
-    # print('dd:', dd)
-elif(wkday != 0):
-    print('월요일이 아니에요!')
-    dd = dd - 1 - hyoo_gaa       # 어제 날짜로 돌아가!(화->월, 수->화 이런식으로) - 휴가일자 추가
-    days_to_go = 1 + hyoo_gaa    # 휴가일자 추가
-    # print('dd:', dd)
+if (past_data):
+    today = date(2022, 4, 1)
+    yy = today.year
+    mm = today.month
+    dd = today.day
+    wkday = today.weekday()
+    print('yy:', yy, 'mm:', mm, 'dd:', dd, 'wkday:', wkday)
+    days_to_go = 1
+else:
+
+    today = date.today()
+    # today = date(2022, 4, 18)     # 특정 날짜 돌리고 싶으면 여기를... 근데 하루이틀만 돌리는건 안되넹.. 어케하지?
+    yy = today.year
+    mm = today.month
+    dd = today.day
+    wkday = today.weekday()
+    print('yy:', yy, 'mm:', mm, 'dd:', dd, 'wkday:', wkday)
+
+    if(wkday == 0): # 만약 오늘이 월요일이면?
+        print('월요일이에요!')
+        dd = dd - 3 - hyoo_gaa        # 3일전으로 돌아가(금) - 휴가일자추가
+        days_to_go = 2 + hyoo_gaa     # 이틀 돌릴거야 + 휴가일자추가
+        # print('dd:', dd)
+    elif(wkday != 0):
+        print('월요일이 아니에요!')
+        dd = dd - 1 - hyoo_gaa       # 어제 날짜로 돌아가!(화->월, 수->화 이런식으로) - 휴가일자 추가
+        days_to_go = 1 + hyoo_gaa    # 휴가일자 추가
+        # print('dd:', dd)
 
 while True:  # 루프문 들어와써요!
     if keyboard.is_pressed('END'):
