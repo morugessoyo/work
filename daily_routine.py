@@ -276,51 +276,51 @@ while True:  # 루프문 들어와써요!
             if keyboard.is_pressed('end'):
                 print('end 눌러 종료합니다.')
                 break
-            # # print("오늘은 수술이 있구만요")
-            # t.sleep(0.3)
-            # pag.click(1076, 93)
-            # t.sleep(0.3)
-            # clear_screen()  # 예 누름
-            # t.sleep(0.5)
-            # pag.write(crm_password)  # CRM 비번 입력
-            # t.sleep(0.3)
-            # clear_screen()  # 예 누름
-            # cur_date = get_date(yy, mm, dd).strftime('%Y-%m-%d')  # 파일이름 저장(날짜로)
-            # # print('cur_date:', cur_date)
-            # pag.write(cur_date)
-            # t.sleep(0.5)
-            #
-            # # 엑셀파일을 '작업 - 011_수술자목록 - CRM'에 저장하려고 만든거
-            # pag.click(pag.locateCenterOnScreen('c_Gdrive.PNG', confidence=0.9))
-            # t.sleep(0.3)
-            # pag.doubleClick(pag.locateCenterOnScreen('c_jakup.PNG', confidence=0.9))
-            # t.sleep(0.3)
-            # pag.doubleClick(pag.locateCenterOnScreen('c_surgery_folder.PNG', confidence=0.9))
-            # t.sleep(0.3)
-            # pag.doubleClick(pag.locateCenterOnScreen('c_crm_folder.PNG', confidence=0.9))
-            # t.sleep(0.3)
-            # # pag.doubleClick(pag.locateCenterOnScreen('c_2022_folder.PNG', confidence=0.9)) # 2022-01 폴더 들어가는거라 주석처리함
-            # clear_screen()  # 저장 누름
-            # t.sleep(0.1)
-            # clear_screen()  # 만약 같은 이름 가진 파일 있다? 덮어쓰기!
-            #
-            # # 수술자목록파일 저장했으니, 이제 매크로파일 불러와서 새로만든 파일에 매크로 돌려놓읍시다.
-            # # 엑셀 띄우지 않고 실행!
-            # app = xw.App(visible=False)
-            #
-            # file_dir_name = 'G:/작업/011_수술정리/crm/'
-            # wb = xw.Book('C:\\Users\\onnuri\\Documents\\crm\\2019-05-01.xlsm')
-            # my_macro = wb.macro('수술자2')   # 매크로 이름 여기에 넣어요
-            # wb1 = xw.Book(file_dir_name + cur_date+'.xls')
-            # my_macro()                     # 매크로 돌려요
-            # t.sleep(0.5)
-            # wb1.save(file_dir_name + cur_date + '.xls')
-            # t.sleep(0.5)
-            # wb1.close()
-            # t.sleep(0.5)
-            # wb.close()
-            # t.sleep(3)
-            # print('CRM 수술자 목록 저장 완료:'+file_dir_name+cur_date+'.xls')
+            # print("오늘은 수술이 있구만요")
+            t.sleep(0.3)
+            pag.click(1076, 93)
+            t.sleep(0.3)
+            clear_screen()  # 예 누름
+            t.sleep(0.5)
+            pag.write(crm_password)  # CRM 비번 입력
+            t.sleep(0.3)
+            clear_screen()  # 예 누름
+            cur_date = get_date(yy, mm, dd).strftime('%Y-%m-%d')  # 파일이름 저장(날짜로)
+            # print('cur_date:', cur_date)
+            pag.write(cur_date)
+            t.sleep(0.5)
+
+            # 엑셀파일을 '작업 - 011_수술자목록 - CRM'에 저장하려고 만든거
+            pag.click(pag.locateCenterOnScreen('c_Gdrive.PNG', confidence=0.9))
+            t.sleep(0.3)
+            pag.doubleClick(pag.locateCenterOnScreen('c_jakup.PNG', confidence=0.9))
+            t.sleep(0.3)
+            pag.doubleClick(pag.locateCenterOnScreen('c_surgery_folder.PNG', confidence=0.9))
+            t.sleep(0.3)
+            pag.doubleClick(pag.locateCenterOnScreen('c_crm_folder.PNG', confidence=0.9))
+            t.sleep(0.3)
+            # pag.doubleClick(pag.locateCenterOnScreen('c_2022_folder.PNG', confidence=0.9)) # 2022-01 폴더 들어가는거라 주석처리함
+            clear_screen()  # 저장 누름
+            t.sleep(0.1)
+            clear_screen()  # 만약 같은 이름 가진 파일 있다? 덮어쓰기!
+
+            # 수술자목록파일 저장했으니, 이제 매크로파일 불러와서 새로만든 파일에 매크로 돌려놓읍시다.
+            # 엑셀 띄우지 않고 실행!
+            app = xw.App(visible=False)
+
+            file_dir_name = 'G:/작업/011_수술정리/crm/'
+            wb = xw.Book('C:\\Users\\onnuri\\Documents\\crm\\2019-05-01.xlsm')
+            my_macro = wb.macro('수술자2')   # 매크로 이름 여기에 넣어요
+            wb1 = xw.Book(file_dir_name + cur_date+'.xls')
+            my_macro()                     # 매크로 돌려요
+            t.sleep(0.5)
+            wb1.save(file_dir_name + cur_date + '.xls')
+            t.sleep(0.5)
+            wb1.close()
+            t.sleep(0.5)
+            wb.close()
+            t.sleep(3)
+            print('CRM 수술자 목록 저장 완료:'+file_dir_name+cur_date+'.xls')
 
             # 2. 하이큐 일일장부 만들어요
             hiq_on_check()
