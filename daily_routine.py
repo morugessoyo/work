@@ -21,7 +21,6 @@ user32 = ctypes.windll.user32
 
 pix_status_line = (210, 210, 210)   # 회색 줄이 없으면 환자가 엄서요!
 
-hyoo_gaa = 1
 
 
 crm_password = '38tkfdl!'
@@ -225,8 +224,9 @@ def normalize(s): # 콤마 없애주세요 흑흑 ※
 
 
 # 여기서부터 실제 코드!
-
+hyoo_gaa = 0       # 휴가 다녀왔으면 숫자 바꾸기
 today = date.today()
+# today = date(2022, 4, 18)     # 특정 날짜 돌리고 싶으면 여기를... 근데 하루이틀만 돌리는건 안되넹.. 어케하지?
 yy = today.year
 mm = today.month
 dd = today.day
@@ -237,12 +237,12 @@ if(wkday == 0): # 만약 오늘이 월요일이면?
     print('월요일이에요!')
     dd = dd - 3 - hyoo_gaa        # 3일전으로 돌아가(금) - 휴가일자추가
     days_to_go = 2 + hyoo_gaa     # 이틀 돌릴거야 + 휴가일자추가
-    print('dd:', dd)
+    # print('dd:', dd)
 elif(wkday != 0):
     print('월요일이 아니에요!')
     dd = dd - 1 - hyoo_gaa       # 어제 날짜로 돌아가!(화->월, 수->화 이런식으로) - 휴가일자 추가
     days_to_go = 1 + hyoo_gaa    # 휴가일자 추가
-    print('dd:', dd)
+    # print('dd:', dd)
 
 while True:  # 루프문 들어와써요!
     if keyboard.is_pressed('END'):
