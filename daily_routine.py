@@ -128,7 +128,7 @@ def hiq_on_check():
         if (hiq_soonap):      # 메인메뉴에서 수납버튼 클릭
             pag.click(hiq_soonap)
             t.sleep(10)
-            hiq_jeopsoo_on = pag.locateCenterOnScreen('d_hiq_jeopsoo_on.PNG', confidence=0.9)
+            # hiq_jeopsoo_on = pag.locateCenterOnScreen('d_hiq_jeopsoo_on.PNG', confidence=0.9)
             hiq_jeopsoo = pag.locateCenterOnScreen('d_hiq_jeopsoo.PNG', confidence=0.9) # 필요없을 것 같지만 '접수등록'(파란바탕) 확인용
             if (hiq_jeopsoo):     # 수납/등록창 띄워졌는데 접수등록에 파란불이 안들어와있다?
                 pag.click(hiq_jeopsoo)
@@ -151,17 +151,17 @@ def hiq_on_check():
             # print('수납집계 창 켜졌어요3')
             t.sleep(1)
             return True
-    else:
-        print('마감관리버튼이 안보여요')
+    # else:
+        # print('마감관리버튼이 안보여요')
     finance_o = pag.locateCenterOnScreen('d_finance_o.PNG', confidence=0.95)
     t.sleep(1)
     if (finance_o):     # 아이플러스차트 아이콘 + 수납집계(회색바탕) 확인
         pag.click(finance_o)
         finance_on = pag.locateCenterOnScreen('d_finance_on.PNG', confidence=0.95)
         t.sleep(2)
-        if (finance_on):      # 수납집계창의 파란바탕 수납집계 버튼 보인다!
-            print('수납집계 창 켜졌어요1')
-        else:                 # 수납집계창이 아니구먼..
+        if not (finance_on):      # 수납집계창의 파란바탕 수납집계 버튼 보인다! / 안보인다!
+        #     print('수납집계 창 켜졌어요1')
+        # else:                 # 수납집계창이 아니구먼..
             print('수납집계창이 아니구먼..')
             return False
     else:
