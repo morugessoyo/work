@@ -38,7 +38,7 @@ def get_date(y, m, d):
     s = f'{y:04d}-{m:02d}-{d:02d}'
     return datetime.strptime(s, '%Y-%m-%d')
 
-def click_date(day_day, what_week):  # 화면 왼쪽 위에 펼쳐져있는 달력에서 날짜 클릭하기
+def click_date(day_day, what_week):  # CRM 화면 왼쪽 위에 펼쳐져있는 달력에서 날짜 클릭하기
     if keyboard.is_pressed('END'):
         return
 
@@ -53,7 +53,6 @@ def click_date(day_day, what_week):  # 화면 왼쪽 위에 펼쳐져있는 달�
     # print('달력 클릭:', 46 + ((day_day + 1) % 7) * 20, 127 + (what_week * 16))
     t.sleep(1)
     return
-
 
 def clear_screen():
     if keyboard.is_pressed('END'):
@@ -105,6 +104,70 @@ def crm_on_check():                # CRM 켜져있는지 확인하는 함수
     #     crm_schedule = pag.locateCenterOnScreen('a_crm_schedule.PNG', confidence=0.9)
     #     pag.click(crm_schedule)
     #     t.sleep(0.5)
+
+def crm_month_check():
+    if keyboard.is_pressed('END'):
+        return
+
+    crm_1 = pag.locateCenterOnScreen('crm_1.PNG', confidence=0.95, region=(74, 85, 57, 13))
+    crm_2 = pag.locateCenterOnScreen('crm_2.PNG', confidence=0.95, region=(74, 85, 57, 13))
+    crm_3 = pag.locateCenterOnScreen('crm_3.PNG', confidence=0.95, region=(74, 85, 57, 13))
+    crm_4 = pag.locateCenterOnScreen('crm_4.PNG', confidence=0.95, region=(74, 85, 57, 13))
+    crm_5 = pag.locateCenterOnScreen('crm_5.PNG', confidence=0.95, region=(74, 85, 57, 13))
+    crm_6 = pag.locateCenterOnScreen('crm_6.PNG', confidence=0.95, region=(74, 85, 57, 13))
+    crm_7 = pag.locateCenterOnScreen('crm_7.PNG', confidence=0.95, region=(74, 85, 57, 13))
+    crm_8 = pag.locateCenterOnScreen('crm_8.PNG', confidence=0.95, region=(74, 85, 57, 13))
+    crm_9 = pag.locateCenterOnScreen('crm_9.PNG', confidence=0.95, region=(74, 85, 57, 13))
+    crm_10 = pag.locateCenterOnScreen('crm_10.PNG', confidence=0.95, region=(74, 85, 57, 13))
+    crm_11 = pag.locateCenterOnScreen('crm_11.PNG', confidence=0.95, region=(74, 85, 57, 13))
+    crm_12 = pag.locateCenterOnScreen('crm_12.PNG', confidence=0.95, region=(74, 85, 57, 13))
+    if crm_1:
+        return 1
+    elif crm_2:
+        return 2
+    elif crm_3:
+        return 3
+    elif crm_4:
+        return 4
+    elif crm_5:
+        return 5
+    elif crm_6:
+        return 6
+    elif crm_7:
+        return 7
+    elif crm_8:
+        return 8
+    elif crm_9:
+        return 9
+    elif crm_10:
+        return 10
+    elif crm_11:
+        return 11
+    elif crm_12:
+        return 12
+    else:
+        return 0
+
+def crm_click_month(month, check_month):
+    if keyboard.is_pressed('END'):
+        return
+
+    to_go_month = month
+    cur_month = check_month
+
+    for i in range(0, 12, 1):
+        if(to_go_month > cur_month):      # 목표 월이 더 크면?
+            pag.click(184, 89)   # 다음달로 보냅시다
+            t.sleep(1)
+            if(to_go_month == crm_month_check()):
+                return
+        else:                            # 목표 월이 더 작으면?
+            pag.click(24, 92)    # 이전달로 보냅시다
+            t.sleep(1)
+            if (to_go_month == crm_month_check()):
+                return
+
+
 
 def hiq_on_check():
     if keyboard.is_pressed('END'):
@@ -236,7 +299,6 @@ if (past_data):
     print('yy:', yy, 'mm:', mm, 'dd:', dd, 'wkday:', wkday)
     days_to_go = 1
 else:
-
     today = date.today()
     # today = date(2022, 4, 18)     # 특정 날짜 돌리고 싶으면 여기를... 근데 하루이틀만 돌리는건 안되넹.. 어케하지?
     yy = today.year
@@ -247,14 +309,32 @@ else:
 
     if(wkday == 0): # 만약 오늘이 월요일이면?
         print('월요일이에요!')
-        dd = dd - 3 - hyoo_gaa        # 3일전으로 돌아가(금) - 휴가일자추가
-        days_to_go = 2 + hyoo_gaa     # 이틀 돌릴거야 + 휴가일자추가
-        # print('dd:', dd)
+        if (dd <= (3 + hyoo_gaa)):
+            time1 = datetime(yy, mm, dd)
+            # print('time1:', time1)
+            time2 = time1 + timedelta(days=(-3-hyoo_gaa))
+            # print('time2:', time2)
+            mm = time2.month
+            dd = time2.day
+            days_to_go = 2 + hyoo_gaa  # 휴가일자 추가
+        else:
+            dd = dd - 3 - hyoo_gaa        # 3일전으로 돌아가(금) - 휴가일자추가
+            days_to_go = 2 + hyoo_gaa     # 이틀 돌릴거야 + 휴가일자추가
+            # print('dd:', dd)
     elif(wkday != 0):
         print('월요일이 아니에요!')
-        dd = dd - 1 - hyoo_gaa       # 어제 날짜로 돌아가!(화->월, 수->화 이런식으로) - 휴가일자 추가
-        days_to_go = 1 + hyoo_gaa    # 휴가일자 추가
-        # print('dd:', dd)
+        if (dd <= (1 + hyoo_gaa)):
+            time1 = datetime(yy, mm, dd)
+            # print('time1:', time1)
+            time2 = time1 + timedelta(days=(-1 - hyoo_gaa))
+            # print('time2:', time2)
+            mm = time2.month
+            dd = time2.day
+            days_to_go = 1 + hyoo_gaa  # 휴가일자 추가
+        else:
+            dd = dd - 1 - hyoo_gaa       # 어제 날짜로 돌아가!(화->월, 수->화 이런식으로) - 휴가일자 추가
+            days_to_go = 1 + hyoo_gaa    # 휴가일자 추가
+            # print('dd:', dd)
 
 while True:  # 루프문 들어와써요!
     if keyboard.is_pressed('END'):
@@ -270,6 +350,12 @@ while True:  # 루프문 들어와써요!
         t.sleep(1)
         crm_surgery_only()  # 수술자 창인지 확인
         t.sleep(2)
+        if (mm > crm_month_check()):
+            # print('달:', mm, 'check:', crm_month_check())
+            crm_click_month(mm, crm_month_check())
+        elif (mm < crm_month_check()):
+            # print('달:', mm, 'check:', crm_month_check())
+            crm_click_month(mm, crm_month_check())
 
         print('CRM 기준(현재)날짜:', get_date(yy, mm, dd).strftime('%Y-%m-%d'))
         what_week = get_week_of_month(yy, mm, dd)   # 몇째주
