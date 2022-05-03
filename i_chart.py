@@ -14,15 +14,28 @@ one_day_only = False
 
 yy = 2022
 mm = 4
-dd = 20
+dd = 8
 
 end_yy = 2022
 end_mm = 4
-end_dd = 21
+end_dd = 8
 
 # dd_end_date = 11
 
 password = 'dhssnfl3!'
+
+def adm_check():
+    adm = pag.locateCenterOnScreen('h_adm.PNG', confidence=0.98, region=(515, 504, 69, 30))
+    not_adm = pag.locateCenterOnScreen('h_not_adm.PNG', confidence=0.98, region=(515, 504, 69, 30))
+    if (adm):
+        print('입원환자')
+        return 1
+    elif (not_adm):
+        print('외래환자')
+        return 2
+    else:
+        print('에러예요!')
+        return 0
 
 def position_check():
     screen = ImageGrab.grab()
@@ -57,70 +70,130 @@ def get_week_of_month(year, month, day):
 #         origin = firstday + timedelta(days=6-firstday.weekday())
 #     return (target - origin).days // 7 + 1
 
-def Chunggoo():   # 코드에 따라 상병 추가하는 작업하기
-    # t.sleep(2)
-    print('청구합시다')
+def Chunggoo_adm():
+    if keyboard.is_pressed('END'):
+        return
+
+    print('입원 청구합시다')
+    dur_clear()
+    #s코드 두개
+    s5117 = pag.locateCenterOnScreen('s5117.png', confidence=0.92, region=(508, 76, 782, 854))
+    s5119 = pag.locateCenterOnScreen('s5119.png', confidence=0.92, region=(508, 76, 782, 854))
+    #보험렌즈 / 차트내용쪽에 있어요
+    h_1_1 = pag.locateCenterOnScreen('h_1_571.png', confidence=0.92, region=(508, 76, 782, 854))
+    h_1_2 = pag.locateCenterOnScreen('h_1_572.png', confidence=0.92, region=(508, 76, 782, 854))
+    h_1_3 = pag.locateCenterOnScreen('h_1_584.png', confidence=0.92, region=(508, 76, 782, 854))
+
+    if(h_1_1)or(h_1_2)or(h_1_3):  # 보험렌즈가 있으면?
+        if not (s5117):
+            h_empty = pag.locateCenterOnScreen('h_code_empty.png', confidence=0.92, region=(508, 76, 782, 854))
+            pag.click(h_empty)
+            keyboard.write('S5117')
+            pag.hotkey('enter')
+        elif not (s5119):
+            h_empty = pag.locateCenterOnScreen('h_code_empty.png', confidence=0.92, region=(508, 76, 782, 854))
+            pag.click(h_empty)
+            keyboard.write('S5119')
+            pag.hotkey('enter')
+    else:
+        if (s5117):   # 일반렌즈인데 S5117이 있다? 지워요!
+            pag.click(s5117)
+            keyboard.write(' ')
+            pag.hotkey('enter')
+
+    if (s5117):             # s코드 옆에 S(소절개)코드 넣기
+        x = s5117[0] + 495
+        pag.click(x, s5117[1])
+        keyboard.write('S')
+        pag.hotkey('enter')
+    if (s5119):
+        x = s5119[0] + 495
+        pag.click(x, s5119[1])
+        keyboard.write('S')
+        pag.hotkey('enter')
+
+    # 의료의 질 점검표 클릭
+    pag.click(1030,35)
+    t.sleep(0.5)
+    h_load = pag.locateCenterOnScreen('h_load.png', confidence=0.92)
+    pag.click(h_load)
+    t.sleep(0.5)
+    h_save = pag.locateCenterOnScreen('h_save.png', confidence=0.92)
+    pag.click(h_save)
+    t.sleep(0.5)
+
+    # 차트 저장
+    pag.hotkey('F3')
+    t.sleep(1)
+    dur_clear()
+    t.sleep(0.1)
+
+def Chunggoo_not_adm():   # 코드에 따라 상병 추가하는 작업하기
+    if keyboard.is_pressed('END'):
+        return
+
+    print('외래 청구합시다')
     dur_clear()
 
     # 상병
-    h0411 = pag.locateCenterOnScreen('h0411.png', confidence=0.92, region=(508, 76, 782, 854))
-    h0204 = pag.locateCenterOnScreen('h0204.png', confidence=0.92, region=(508, 76, 782, 854))
-    h1618 = pag.locateCenterOnScreen('h1618.png', confidence=0.92, region=(508, 76, 782, 854))
-    h0000 = pag.locateCenterOnScreen('h0000.png', confidence=0.92, region=(508, 76, 782, 854))
-    h0001 = pag.locateCenterOnScreen('h0001.png', confidence=0.92, region=(508, 76, 782, 854))
-    h001 = pag.locateCenterOnScreen('h001.png', confidence=0.92, region=(508, 76, 782, 854))
-    h1111 = pag.locateCenterOnScreen('h1111.png', confidence=0.92, region=(508, 76, 782, 854))
-    h101 = pag.locateCenterOnScreen('h101.png', confidence=0.92, region=(508, 76, 782, 854))
-    h258 = pag.locateCenterOnScreen('h258.png', confidence=0.92, region=(508, 76, 782, 854))
-    h2602 = pag.locateCenterOnScreen('h2602.png', confidence=0.92, region=(508, 76, 782, 854))
-    h105 = pag.locateCenterOnScreen('h105.png', confidence=0.92, region=(508, 76, 782, 854))
-    h108 = pag.locateCenterOnScreen('h108.png', confidence=0.92, region=(508, 76, 782, 854))
-    h019 = pag.locateCenterOnScreen('h019.png', confidence=0.92, region=(508, 76, 782, 854))
-    h182 = pag.locateCenterOnScreen('h182.png', confidence=0.92, region=(508, 76, 782, 854))
-    h188 = pag.locateCenterOnScreen('h188.png', confidence=0.92, region=(508, 76, 782, 854))
-    h191 = pag.locateCenterOnScreen('h191.png', confidence=0.92, region=(508, 76, 782, 854))
-    h193 = pag.locateCenterOnScreen('h193.png', confidence=0.92, region=(508, 76, 782, 854))
-    h33 = pag.locateCenterOnScreen('h33.png', confidence=0.92, region=(508, 76, 782, 854))
-    h350 = pag.locateCenterOnScreen('h350.png', confidence=0.92, region=(508, 76, 782, 854))
-    # h3338 = pag.locateCenterOnScreen('h3338.png', confidence=0.92, region=(508, 76, 782, 854))
-    h400 = pag.locateCenterOnScreen('h400.png', confidence=0.92, region=(508, 76, 782, 854))
-    h526 = pag.locateCenterOnScreen('h526.png', confidence=0.92, region=(508, 76, 782, 854))
-    z947 = pag.locateCenterOnScreen('z947.png', confidence=0.92, region=(508, 76, 782, 854))
-    z999 = pag.locateCenterOnScreen('z999.png', confidence=0.92, region=(508, 76, 782, 854))
-    z998 = pag.locateCenterOnScreen('z998.png', confidence=0.92, region=(508, 76, 782, 854))
-    z997 = pag.locateCenterOnScreen('z997.png', confidence=0.92, region=(508, 76, 782, 854))
-    z961 = pag.locateCenterOnScreen('z961.png', confidence=0.92, region=(508, 76, 782, 854))
+    h0411 = pag.locateCenterOnScreen('h0411.png', confidence=0.95, region=(508, 76, 782, 854))
+    h0204 = pag.locateCenterOnScreen('h0204.png', confidence=0.95, region=(508, 76, 782, 854))
+    h1618 = pag.locateCenterOnScreen('h1618.png', confidence=0.95, region=(508, 76, 782, 854))
+    h0000 = pag.locateCenterOnScreen('h0000.png', confidence=0.95, region=(508, 76, 782, 854))
+    h0001 = pag.locateCenterOnScreen('h0001.png', confidence=0.95, region=(508, 76, 782, 854))
+    h001 = pag.locateCenterOnScreen('h001.png', confidence=0.95, region=(508, 76, 782, 854))
+    h1111 = pag.locateCenterOnScreen('h1111.png', confidence=0.95, region=(508, 76, 782, 854))
+    h101 = pag.locateCenterOnScreen('h101.png', confidence=0.95, region=(508, 76, 782, 854))
+    h258 = pag.locateCenterOnScreen('h258.png', confidence=0.95, region=(508, 76, 782, 854))
+    h2602 = pag.locateCenterOnScreen('h2602.png', confidence=0.95, region=(508, 76, 782, 854))
+    h105 = pag.locateCenterOnScreen('h105.png', confidence=0.95, region=(508, 76, 782, 854))
+    h108 = pag.locateCenterOnScreen('h108.png', confidence=0.95, region=(508, 76, 782, 854))
+    h019 = pag.locateCenterOnScreen('h019.png', confidence=0.95, region=(508, 76, 782, 854))
+    h182 = pag.locateCenterOnScreen('h182.png', confidence=0.95, region=(508, 76, 782, 854))
+    h188 = pag.locateCenterOnScreen('h188.png', confidence=0.95, region=(508, 76, 782, 854))
+    h191 = pag.locateCenterOnScreen('h191.png', confidence=0.95, region=(508, 76, 782, 854))
+    h193 = pag.locateCenterOnScreen('h193.png', confidence=0.95, region=(508, 76, 782, 854))
+    h33 = pag.locateCenterOnScreen('h33.png', confidence=0.95, region=(508, 76, 782, 854))
+    h350 = pag.locateCenterOnScreen('h350.png', confidence=0.95, region=(508, 76, 782, 854))
+    # h3338 = pag.locateCenterOnScreen('h3338.png', confidence=0.95, region=(508, 76, 782, 854))
+    h400 = pag.locateCenterOnScreen('h400.png', confidence=0.95, region=(508, 76, 782, 854))
+    h526 = pag.locateCenterOnScreen('h526.png', confidence=0.95, region=(508, 76, 782, 854))
+    z947 = pag.locateCenterOnScreen('z947.png', confidence=0.95, region=(508, 76, 782, 854))
+    z999 = pag.locateCenterOnScreen('z999.png', confidence=0.95, region=(508, 76, 782, 854))
+    z998 = pag.locateCenterOnScreen('z998.png', confidence=0.95, region=(508, 76, 782, 854))
+    z997 = pag.locateCenterOnScreen('z997.png', confidence=0.95, region=(508, 76, 782, 854))
+    z961 = pag.locateCenterOnScreen('z961.png', confidence=0.95, region=(508, 76, 782, 854))
 
     # 약, 검사수가 등 차트내용
-    dcombi = pag.locateCenterOnScreen('dcombi.png', confidence=0.92, region=(508, 76, 782, 854))
-    dcosop = pag.locateCenterOnScreen('dcosop.png', confidence=0.92, region=(508, 76, 782, 854))
-    ddicuapo = pag.locateCenterOnScreen('ddicuapo.png', confidence=0.92, region=(508, 76, 782, 854))
-    dfluoro = pag.locateCenterOnScreen('dfluoro.png', confidence=0.92, region=(508, 76, 782, 854))
-    dhyal_1 = pag.locateCenterOnScreen('dhyal_1.png', confidence=0.92, region=(508, 76, 782, 854))
-    dmoxi = pag.locateCenterOnScreen('dmoxi.png', confidence=0.92, region=(508, 76, 782, 854))
-    doflo = pag.locateCenterOnScreen('doflo.png', confidence=0.92, region=(508, 76, 782, 854))
-    doflox = pag.locateCenterOnScreen('doflox.png', confidence=0.92, region=(508, 76, 782, 854))
-    dolopata = pag.locateCenterOnScreen('dolopata.png', confidence=0.92, region=(508, 76, 782, 854))
-    dporus = pag.locateCenterOnScreen('dporus.png', confidence=0.92, region=(508, 76, 782, 854))
-    dlil = pag.locateCenterOnScreen('dlil.png', confidence=0.92, region=(508, 76, 782, 854))
-    dposod = pag.locateCenterOnScreen('dposod.png', confidence=0.92, region=(508, 76, 782, 854))
-    dpire = pag.locateCenterOnScreen('dpire.png', confidence=0.92, region=(508, 76, 782, 854))
-    dacyclo = pag.locateCenterOnScreen('dacyclo.png', confidence=0.92, region=(508, 76, 782, 854))
-    dcyclo = pag.locateCenterOnScreen('dcyclo.png', confidence=0.92, region=(508, 76, 782, 854))
+    dcombi = pag.locateCenterOnScreen('dcombi.png', confidence=0.95, region=(508, 76, 782, 854))
+    dcosop = pag.locateCenterOnScreen('dcosop.png', confidence=0.95, region=(508, 76, 782, 854))
+    ddicuapo = pag.locateCenterOnScreen('ddicuapo.png', confidence=0.95, region=(508, 76, 782, 854))
+    dfluoro = pag.locateCenterOnScreen('dfluoro.png', confidence=0.95, region=(508, 76, 782, 854))
+    dhyal_1 = pag.locateCenterOnScreen('dhyal_1.png', confidence=0.95, region=(508, 76, 782, 854))
+    dmoxi = pag.locateCenterOnScreen('dmoxi.png', confidence=0.95, region=(508, 76, 782, 854))
+    doflo = pag.locateCenterOnScreen('doflo.png', confidence=0.95, region=(508, 76, 782, 854))
+    doflox = pag.locateCenterOnScreen('doflox.png', confidence=0.95, region=(508, 76, 782, 854))
+    dolopata = pag.locateCenterOnScreen('dolopata.png', confidence=0.95, region=(508, 76, 782, 854))
+    dporus = pag.locateCenterOnScreen('dporus.png', confidence=0.95, region=(508, 76, 782, 854))
+    dlil = pag.locateCenterOnScreen('dlil.png', confidence=0.95, region=(508, 76, 782, 854))
+    dposod = pag.locateCenterOnScreen('dposod.png', confidence=0.95, region=(508, 76, 782, 854))
+    dpire = pag.locateCenterOnScreen('dpire.png', confidence=0.95, region=(508, 76, 782, 854))
+    dacyclo = pag.locateCenterOnScreen('dacyclo.png', confidence=0.95, region=(508, 76, 782, 854))
+    dcyclo = pag.locateCenterOnScreen('dcyclo.png', confidence=0.95, region=(508, 76, 782, 854))
 
-    e6660 = pag.locateCenterOnScreen('e6660.png', confidence=0.92, region=(508, 76, 782, 854))
-    e6670 = pag.locateCenterOnScreen('e6670.png', confidence=0.92, region=(508, 76, 782, 854))
-    e6674 = pag.locateCenterOnScreen('e6674.png', confidence=0.92, region=(508, 76, 782, 854))
-    e6710 = pag.locateCenterOnScreen('e6710.png', confidence=0.92, region=(508, 76, 782, 854))
-    e6899 = pag.locateCenterOnScreen('e6899.png', confidence=0.92, region=(508, 76, 782, 854))
-    s5160 = pag.locateCenterOnScreen('s5160.png', confidence=0.92, region=(508, 76, 782, 854))
-    s5400 = pag.locateCenterOnScreen('s5400.png', confidence=0.92, region=(508, 76, 782, 854))
-    s5430 = pag.locateCenterOnScreen('s5430.png', confidence=0.92, region=(508, 76, 782, 854))
-    s5390 = pag.locateCenterOnScreen('s5390.png', confidence=0.92, region=(508, 76, 782, 854))
-    s4960 = pag.locateCenterOnScreen('s4960.png', confidence=0.92, region=(508, 76, 782, 854))
-    ez796 = pag.locateCenterOnScreen('ez796.png', confidence=0.92, region=(508, 76, 782, 854))
+    e6660 = pag.locateCenterOnScreen('e6660.png', confidence=0.95, region=(508, 76, 782, 854))
+    e6670 = pag.locateCenterOnScreen('e6670.png', confidence=0.95, region=(508, 76, 782, 854))
+    e6674 = pag.locateCenterOnScreen('e6674.png', confidence=0.95, region=(508, 76, 782, 854))
+    e6710 = pag.locateCenterOnScreen('e6710.png', confidence=0.95, region=(508, 76, 782, 854))
+    e6899 = pag.locateCenterOnScreen('e6899.png', confidence=0.95, region=(508, 76, 782, 854))
+    s5160 = pag.locateCenterOnScreen('s5160.png', confidence=0.95, region=(508, 76, 782, 854))
+    s5400 = pag.locateCenterOnScreen('s5400.png', confidence=0.95, region=(508, 76, 782, 854))
+    s5430 = pag.locateCenterOnScreen('s5430.png', confidence=0.95, region=(508, 76, 782, 854))
+    s5390 = pag.locateCenterOnScreen('s5390.png', confidence=0.95, region=(508, 76, 782, 854))
+    s4960 = pag.locateCenterOnScreen('s4960.png', confidence=0.95, region=(508, 76, 782, 854))
+    ez796 = pag.locateCenterOnScreen('ez796.png', confidence=0.95, region=(508, 76, 782, 854))
 
-    hempty = pag.locateCenterOnScreen('hempty.png', confidence=0.92, region=(508, 76, 782, 425)) # 상병에 빈자리 찾아요
+    hempty = pag.locateCenterOnScreen('hempty.png', confidence=0.95, region=(508, 76, 782, 425)) # 상병에 빈자리 찾아요
     hblank = pag.locateCenterOnScreen('hblank.png', confidence=0.95, region=(508, 76, 782, 425)) # 상병이 아예 없어요
 
     while True:
@@ -492,8 +565,14 @@ def click_pat():
                 # dur에러 확인, 청구 돌리고, 다시 화면정리  - 잠시 멈춰요
                 t.sleep(1.0)
                 dur_clear()
-                # t.sleep(0.5)
-                Chunggoo()
+                t.sleep(0.5)
+                if (adm_check() == 2):  # 외래환자면?
+                    Chunggoo_not_adm()
+                elif (adm_check() == 1): # 입원환자면?
+                    Chunggoo_adm()
+                elif (adm_check() == 0):
+                    print('error!!!')
+                    break
                 t.sleep(0.5)
                 pat_clear()
                 t.sleep(0.1)
@@ -504,6 +583,8 @@ def click_pat():
                 return
 
 def dur_clear():     # 에러메시지 나타나면 확인확인클릭클릭
+    if keyboard.is_pressed('END'):
+        return
     dur_check = pag.locateCenterOnScreen('dur_check.png', confidence=0.9)
     err_check = pag.locateCenterOnScreen('err2.png', confidence=0.8, region=(745,335,650,500))
     err_1_check = pag.locateCenterOnScreen('err_1_check.png', confidence=0.9)
@@ -538,6 +619,8 @@ def click_date(day_day, what_week):       # 화면 맨오른쪽 위 펼쳐져있
     return
 
 def find_num(where):
+    if keyboard.is_pressed('END'):
+        return
     if (where == 'top'):
         x = 1282
         y = 427
@@ -780,6 +863,8 @@ def find_num(where):
         return 0
 
 def month_check():
+    if keyboard.is_pressed('END'):
+        return
     month1 = pag.locateCenterOnScreen('m1.PNG', confidence=0.95, region=(1600, 52, 326, 245))
     month2 = pag.locateCenterOnScreen('m2.PNG', confidence=0.95, region=(1600, 52, 326, 245))
     month3 = pag.locateCenterOnScreen('m3.PNG', confidence=0.95, region=(1600, 52, 326, 245))

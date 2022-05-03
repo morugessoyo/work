@@ -21,10 +21,7 @@ user32 = ctypes.windll.user32
 
 pix_status_line = (210, 210, 210)   # 회색 줄이 없으면 환자가 엄서요!
 
-
-
 crm_password = '38tkfdl!'
-
 
 def get_week_of_month(year, month, day):
     x = np.array(calendar.monthcalendar(year, month))
@@ -44,7 +41,7 @@ def click_date(day_day, what_week):  # CRM 화면 왼쪽 위에 펼쳐져있는 
 
     # 달력에서 날짜 클릭하기 시작
     # print('얼마인가?:',(day_day + 1) % 7, 'day_day:', day_day)
-    if (((day_day + 1) % 7)==0):
+    if (((day_day + 1) % 7) == 0):
         pag.click(46 + ((day_day + 1) % 7) * 20, 127 + ((what_week+1) * 16))  # 날짜 더블클릭!
     else:
         pag.click(46 + ((day_day + 1) % 7) * 20, 127 + (what_week * 16))  # 날짜 더블클릭!
@@ -167,22 +164,18 @@ def crm_click_month(month, check_month):
             if (to_go_month == crm_month_check()):
                 return
 
-
-
 def hiq_on_check():
     if keyboard.is_pressed('END'):
         return
-
-    hiq_icon = pag.locateCenterOnScreen('d_hiq_off.PNG', confidence=0.95, region=(105, 1038, 717, 42))
     find_hiq = pag.locateCenterOnScreen('d_find_hiq.PNG', confidence=0.95, region=(105, 1038, 717, 42))
+    hiq_icon = pag.locateCenterOnScreen('d_hiq_off.PNG', confidence=0.95, region=(105, 1038, 717, 42))
     if (hiq_icon):    # 접수/수납프로그램 켜져있음(아이콘있음)
         pag.click(hiq_icon)
         t.sleep(1)
-        hiq_jeopsoo = pag.locateCenterOnScreen('d_hiq_jeopsoo.PNG', confidence=0.9)
+        hiq_jeopsoo = pag.locateCenterOnScreen('d_hiq_jeopsoo.PNG', confidence=0.95)
         if (hiq_jeopsoo):   # 접수등록탭 꺼져있음
             pag.click(hiq_jeopsoo)     # 여기까지 하면 접수등록탭 파란불 들어온 화면이 되지요!
-            t.sleep(1)
-
+            t.sleep(3)
     elif (find_hiq):   # 메인메뉴만 켜져있음(아이콘있음)
         pag.click(find_hiq)
         t.sleep(1)
@@ -191,7 +184,7 @@ def hiq_on_check():
             pag.click(hiq_soonap)
             t.sleep(10)
             # hiq_jeopsoo_on = pag.locateCenterOnScreen('d_hiq_jeopsoo_on.PNG', confidence=0.9)
-            hiq_jeopsoo = pag.locateCenterOnScreen('d_hiq_jeopsoo.PNG', confidence=0.9) # 필요없을 것 같지만 '접수등록'(파란바탕) 확인용
+            hiq_jeopsoo = pag.locateCenterOnScreen('d_hiq_jeopsoo.PNG', confidence=0.9)  # 필요없을 것 같지만 '접수등록'(파란바탕) 확인용
             if (hiq_jeopsoo):     # 수납/등록창 띄워졌는데 접수등록에 파란불이 안들어와있다?
                 pag.click(hiq_jeopsoo)
                 t.sleep(1)   # 여기까지 하면 접수등록창 띄워져있다
@@ -222,8 +215,6 @@ def hiq_on_check():
         finance_on = pag.locateCenterOnScreen('d_finance_on.PNG', confidence=0.95)
         t.sleep(2)
         if not (finance_on):      # 수납집계창의 파란바탕 수납집계 버튼 보인다! / 안보인다!
-        #     print('수납집계 창 켜졌어요1')
-        # else:                 # 수납집계창이 아니구먼..
             print('수납집계창이 아니구먼..')
             return False
     else:
@@ -235,6 +226,11 @@ def crm_surgery_only():
         return
 
     cond_surgery = pag.locateCenterOnScreen('c_surgery.PNG', confidence=0.9, region=(84, 222, 147, 99))
+    c_today = pag.locateCenterOnScreen('c_surgery.PNG', confidence=0.9, region=(84, 222, 147, 99))
+    if not (c_today):
+        crm_schedule = pag.locateCenterOnScreen('a_crm_schedule.PNG', confidence=0.9)
+        pag.click(crm_schedule)
+    t.sleep(1)
     # CRM 켜진 상태에서 '수술'클릭확인
     if (cond_surgery):  # '수술' 클릭 안되어있으면?
         pag.click(cond_surgery)  # 클릭하고 갑시다
@@ -442,12 +438,12 @@ while True:  # 루프문 들어와써요!
             t.sleep(3)
             # print('조회클릭')
             pag.click(103, 333)  # 내용 클릭
-            t.sleep(0.2)
+            t.sleep(0.3)
             pag.hotkey('ctrl', 'a')
-            t.sleep(0.2)
+            t.sleep(0.3)
             # print('ctrl a')
             pag.hotkey('ctrl', 'c')
-            t.sleep(0.2)
+            t.sleep(0.3)
             # print('ctrl c')
 
             text = pyperclip.paste()  # 얘들아 복사가!! 복사가 돼!!!!
@@ -461,14 +457,14 @@ while True:  # 루프문 들어와써요!
             t.sleep(0.5)
             df = pd.DataFrame(pd.read_csv('clipboard.txt', sep='	'))  # 1번!!! df에다가 데이타 저장
 
-            # print('기준(현재)날짜:', get_date(yy, mm, dd))
+            print('기준(현재)날짜:', get_date(yy, mm, dd))
 
             # 엑셀파일 열어요
             wb = openpyxl.Workbook()  # workbook 만들기
             cur_date = get_date(yy, mm, dd).strftime('%Y-%m-%d')
             # print('cur_date:', cur_date)
             filename = 'G:/작업/010_수납리스트/2022 수납리스트/' + str(cur_date) + '.xlsx'
-            # print('파일저장장소+파일이름:', filename)
+            print('파일저장장소+파일이름:', filename)
             wb.save(filename)  # 엑셀파일 저장하기
             df.to_excel(filename, index=False)  # 2번!!! 엑셀파일에 내용 저장
             wb.close()
@@ -514,8 +510,7 @@ while True:  # 루프문 들어와써요!
                 dd = dd + 1
 
             t.sleep(1)
-            if (i + 1 != days_to_go):
+            if (i + 1) != days_to_go:
                 print('다음 날짜로 진행합니다.')
-
     print('사이클 완료!')
     break
