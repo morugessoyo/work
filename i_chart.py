@@ -14,11 +14,11 @@ one_day_only = False
 
 yy = 2022
 mm = 4
-dd = 8
+dd = 20
 
 end_yy = 2022
-end_mm = 4
-end_dd = 8
+end_mm = 5
+end_dd = 2
 
 # dd_end_date = 11
 
@@ -83,14 +83,15 @@ def Chunggoo_adm():
     h_1_1 = pag.locateCenterOnScreen('h_1_571.png', confidence=0.92, region=(508, 76, 782, 854))
     h_1_2 = pag.locateCenterOnScreen('h_1_572.png', confidence=0.92, region=(508, 76, 782, 854))
     h_1_3 = pag.locateCenterOnScreen('h_1_584.png', confidence=0.92, region=(508, 76, 782, 854))
+    h_1_4 = pag.locateCenterOnScreen('h_1_528.png', confidence=0.92, region=(508, 76, 782, 854))
 
-    if(h_1_1)or(h_1_2)or(h_1_3):  # 보험렌즈가 있으면?
-        if not (s5117):
+    if (h_1_1) or (h_1_2) or (h_1_3) or (h_1_4):  # 보험렌즈가 있으면?
+        if not s5117:
             h_empty = pag.locateCenterOnScreen('h_code_empty.png', confidence=0.92, region=(508, 76, 782, 854))
             pag.click(h_empty)
             keyboard.write('S5117')
             pag.hotkey('enter')
-        elif not (s5119):
+        elif not s5119:
             h_empty = pag.locateCenterOnScreen('h_code_empty.png', confidence=0.92, region=(508, 76, 782, 854))
             pag.click(h_empty)
             keyboard.write('S5119')
@@ -169,6 +170,7 @@ def Chunggoo_not_adm():   # 코드에 따라 상병 추가하는 작업하기
     dcosop = pag.locateCenterOnScreen('dcosop.png', confidence=0.95, region=(508, 76, 782, 854))
     ddicuapo = pag.locateCenterOnScreen('ddicuapo.png', confidence=0.95, region=(508, 76, 782, 854))
     dfluoro = pag.locateCenterOnScreen('dfluoro.png', confidence=0.95, region=(508, 76, 782, 854))
+    dfluoro1 = pag.locateCenterOnScreen('dfluoro1.png', confidence=0.95, region=(508, 76, 782, 854))
     dhyal_1 = pag.locateCenterOnScreen('dhyal_1.png', confidence=0.95, region=(508, 76, 782, 854))
     dmoxi = pag.locateCenterOnScreen('dmoxi.png', confidence=0.95, region=(508, 76, 782, 854))
     doflo = pag.locateCenterOnScreen('doflo.png', confidence=0.95, region=(508, 76, 782, 854))
@@ -238,7 +240,7 @@ def Chunggoo_not_adm():   # 코드에 따라 상병 추가하는 작업하기
             print('헤르페시드/아시클로버 상병추가: h191')
             point_y = point_y + 22
 
-        if (dfluoro) and not (h1618) and not (h193):
+        if (dfluoro or dfluoro1) and not (h1618) and not (h193):
             pag.click(point_x, point_y)
             keyboard.write('h1618')
             pag.hotkey('enter')
@@ -378,17 +380,17 @@ def Chunggoo_not_adm():   # 코드에 따라 상병 추가하는 작업하기
             print('6670 + 6674')
             if (e6660):
                 print('6660도 있어')
-                pag.click(e6670)
-                keyboard.write('0')
-                pag.hotkey('enter')
-                print('광각안저촬영 with 기본안저촬영이라 지웁니다')
-                # t.sleep(0.1)
+                # pag.click(e6670)
+                # keyboard.write('0')
+                # pag.hotkey('enter')
+                # print('광각안저촬영 with 기본안저촬영이라 지웁니다')
+                # # t.sleep(0.1)
             else:
                 print('6660은 없어')
                 pag.click(e6670)
                 keyboard.write('e6660')
                 pag.hotkey('enter')
-                print('광각안저촬영 with 기본안저촬영이라 지우고 안저검사 추가했어요')
+                print('광각안저촬영 with 기본안저촬영이라 지우고 정밀안저검사 추가했어요')
                 point_y = point_y + 22
                 # t.sleep(0.1)
                 keyboard.write('2')
@@ -497,28 +499,7 @@ def click_pat():
                     # pat_y = pat_y + 21
                     # click_position = click_position +1
 
-
-                # print('현재첫번째환자번호:', check_pat_2nd, '스크롤후?:', check_pat_1st)
-                if (pat_no > 23):
-                    check_pat_2nd = find_num('top')     # 현재 목록 첫번째에 있는 환자번호 확인
-                    # print('check_pat_1st:', check_pat_1st, ', check_pat_2nd:', check_pat_2nd)
-                    if (check_pat_1st == check_pat_2nd):
-                        # print('click_position:', click_position)
-                        # print('스크롤 확인. 첫번째 환자번호 같음: ', check_pat_2nd)
-                        pag.doubleClick(pat_x, pat_y)
-                        print(pat_no, '번째 환자 클릭했어요.')
-                        # t.sleep(0.5)
-
-                    else:
-                        # print('click_position:', click_position)
-                        # check_pat_2ndtime = find_num('top')
-                        # print('스크롤 확인. 첫번째 환자번호 달라서 내림: ', check_pat_2nd)
-                        Updown('down')
-                        pag.doubleClick(pat_x, pat_y)
-                        print(pat_no, '번째 환자 클릭했어요.')
-                        # t.sleep(0.5)
-
-
+#여기부터
                 if (pat_no == 40):  # 23/45번째 환자 끝나고 나면
                     Updown('up')  # 스크롤을 올려요~ 18명정도
                     Updown('up')  # 스크롤을 올려요~ 18명정도
@@ -539,7 +520,7 @@ def click_pat():
                     t.sleep(0.1)
 
                     pag.doubleClick(pat_x, pat_y)
-                    print(pat_no, '번째 환자 클릭했어요.')
+                    print(pat_no, '번째 환자 클릭했어요.5')
 
                 if (pat_no > 40):
                     check_pat_2nd = find_num('top')     # 현재 목록 첫번째에 있는 환자번호 확인
@@ -549,7 +530,7 @@ def click_pat():
                         # print('click_position:', click_position)
                         # print('스크롤 확인용. 첫번째 환자번호 같음: ', check_pat_2nd)
                         pag.doubleClick(pat_x, pat_y)
-                        print(pat_no, '번째 환자 클릭했어요.')
+                        print(pat_no, '번째 환자 클릭했어요.6')
                     else:
                         # print('click_position:', click_position)
                         # check_pat_2ndtime = find_num('top')
@@ -560,12 +541,75 @@ def click_pat():
                         Updown('down')  # 두번 다운다운!
                         pag.doubleClick(pat_x, pat_y)
                         print(pat_no, '번째 환자 클릭했어요.')
+#여기까지
 
+                # print('현재첫번째환자번호:', check_pat_2nd, '스크롤후?:', check_pat_1st)
+                if (pat_no > 23):
+                    check_pat_2nd = find_num('top')     # 현재 목록 첫번째에 있는 환자번호 확인
+                    # print('check_pat_1st:', check_pat_1st, ', check_pat_2nd:', check_pat_2nd)
+                    if (check_pat_1st == check_pat_2nd):
+                        # print('click_position:', click_position)
+                        # print('스크롤 확인. 첫번째 환자번호 같음: ', check_pat_2nd)
+                        pag.doubleClick(pat_x, pat_y)
+                        print(pat_no, '번째 환자 클릭했어요.3')
+                        # t.sleep(0.5)
+
+                    else:
+                        # print('click_position:', click_position)
+                        # check_pat_2ndtime = find_num('top')
+                        # print('스크롤 확인. 첫번째 환자번호 달라서 내림: ', check_pat_2nd)
+                        Updown('down')
+                        pag.doubleClick(pat_x, pat_y)
+                        print(pat_no, '번째 환자 클릭했어요.')
+                        # t.sleep(0.5)
+
+
+                # if (pat_no == 40):  # 23/45번째 환자 끝나고 나면
+                #     Updown('up')  # 스크롤을 올려요~ 18명정도
+                #     Updown('up')  # 스크롤을 올려요~ 18명정도
+                #     Updown('up')  # 스크롤을 올려요~ 18명정도
+                #     Updown('down')  # 스크롤을 내려요~ 18명정도
+                #     Updown('down')  # 스크롤을 내려요~ 18명정도
+                #
+                #     check_pat_1st = find_num('top')  # 우선 목록의 첫번째 환자 번호 확인
+                #     check_pat_last = find_num('bottom')  # 우선 목록의 마지막 환자 번호 확인
+                #     # print('스크롤 후 첫번째환자번호:', check_pat_1st, '마지막환자번호:', check_pat_last)
+                #
+                #     # print('pat_y:', pat_y)
+                #     click_position = 41 - check_pat_1st
+                #
+                #     # print('40_click_position:', click_position)
+                #     pat_y = 440+ (21 * (click_position))
+                #     # print('pat_y', pat_y)
+                #     t.sleep(0.1)
+                #
+                #     pag.doubleClick(pat_x, pat_y)
+                #     print(pat_no, '번째 환자 클릭했어요.5')
+                #
+                # if (pat_no > 40):
+                #     check_pat_2nd = find_num('top')     # 현재 목록 첫번째에 있는 환자번호 확인
+                #     # print('check_pat_1st:', check_pat_1st, ', check_pat_2nd:', check_pat_2nd)
+                #
+                #     if (check_pat_1st == check_pat_2nd):
+                #         # print('click_position:', click_position)
+                #         # print('스크롤 확인용. 첫번째 환자번호 같음: ', check_pat_2nd)
+                #         pag.doubleClick(pat_x, pat_y)
+                #         print(pat_no, '번째 환자 클릭했어요.6')
+                #     else:
+                #         # print('click_position:', click_position)
+                #         # check_pat_2ndtime = find_num('top')
+                #         # print('스크롤 확인용. 첫번째 환자번호 달라서 내림: ', check_pat_2nd)
+                #         Updown('down')
+                #         Updown('down')
+                #         t.sleep(0.1)
+                #         Updown('down')  # 두번 다운다운!
+                #         pag.doubleClick(pat_x, pat_y)
+                #         print(pat_no, '번째 환자 클릭했어요.7')
 
                 # dur에러 확인, 청구 돌리고, 다시 화면정리  - 잠시 멈춰요
-                t.sleep(1.0)
+                t.sleep(1)
                 dur_clear()
-                t.sleep(0.5)
+                t.sleep(2)
                 if (adm_check() == 2):  # 외래환자면?
                     Chunggoo_not_adm()
                 elif (adm_check() == 1): # 입원환자면?
@@ -589,8 +633,6 @@ def dur_clear():     # 에러메시지 나타나면 확인확인클릭클릭
     err_check = pag.locateCenterOnScreen('err2.png', confidence=0.8, region=(745,335,650,500))
     err_1_check = pag.locateCenterOnScreen('err_1_check.png', confidence=0.9)
     save_yes = pag.locateCenterOnScreen('save_yes.png', confidence=0.9)
-    if keyboard.is_pressed('END'):
-        return
     if (dur_check) or (err_1_check):
         print('dur확인창!')
         if (dur_check):
@@ -608,7 +650,6 @@ def dur_clear():     # 에러메시지 나타나면 확인확인클릭클릭
         print('save!')
         pag.click(save_yes)
         t.sleep(0.5)
-
 
 def click_date(day_day, what_week):       # 화면 맨오른쪽 위 펼쳐져있는 달력에서 날짜 클릭하기
     # 달력에서 날짜 클릭하기 시작
