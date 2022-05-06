@@ -25,6 +25,9 @@ end_dd = 2
 password = 'dhssnfl3!'
 
 def adm_check():
+    if keyboard.is_pressed('end'):
+        print('end 눌러 종료합니다.')
+        return
     adm = pag.locateCenterOnScreen('h_adm.PNG', confidence=0.98, region=(515, 504, 69, 30))
     not_adm = pag.locateCenterOnScreen('h_not_adm.PNG', confidence=0.98, region=(515, 504, 69, 30))
     if (adm):
@@ -37,7 +40,19 @@ def adm_check():
         print('에러예요!')
         return 0
 
+def hiq_ready():
+    if keyboard.is_pressed('end'):
+        print('end 눌러 종료합니다.')
+        return
+    hiq_finished_list = pag.locateCenterOnScreen('h_finished_list.PNG', confidence=0.98, region=(1294,333,493,30))
+    if (hiq_finished_list):   # 완료 회색바탕이야?
+        pag.click(hiq_finished_list)
+        return
+
 def position_check():
+    if keyboard.is_pressed('end'):
+        print('end 눌러 종료합니다.')
+        return
     screen = ImageGrab.grab()
     pix_status = screen.getpixel((1195,62))  # 상단 회색 바 생겼는지 확인
     if (pix_status == (171, 171, 171)):
@@ -419,8 +434,76 @@ def Chunggoo_not_adm():   # 코드에 따라 상병 추가하는 작업하기
             t.sleep(0.1)
             return True
 
+def hiq_year_check():
+    if keyboard.is_pressed('END'):
+        return
+    hiq_year_2020 = pag.locateCenterOnScreen('hiq_year_2020.PNG', confidence=0.95, region=(1727, 91, 111, 11))
+    hiq_year_2021 = pag.locateCenterOnScreen('hiq_year_2021.PNG', confidence=0.95, region=(1727, 91, 111, 11))
+    hiq_year_2022 = pag.locateCenterOnScreen('hiq_year_2022.PNG', confidence=0.95, region=(1727, 91, 111, 11))
+    hiq_year_2023 = pag.locateCenterOnScreen('hiq_year_2023.PNG', confidence=0.95, region=(1727, 91, 111, 11))
+    hiq_year_2024 = pag.locateCenterOnScreen('hiq_year_2024.PNG', confidence=0.95, region=(1727, 91, 111, 11))
+    hiq_year_2025 = pag.locateCenterOnScreen('hiq_year_2025.PNG', confidence=0.95, region=(1727, 91, 111, 11))
+    if hiq_year_2020:
+        return 2020
+    elif hiq_year_2021:
+        return 2021
+    elif hiq_year_2022:
+        return 2022
+    elif hiq_year_2023:
+        return 2023
+    elif hiq_year_2024:
+        return 2024
+    elif hiq_year_2025:
+        return 2025
+    else:
+        return 0
 
+def hiq_month_check():
+    if keyboard.is_pressed('END'):
+        return
+    hiq_month_1 = pag.locateCenterOnScreen('hiq_month_1.PNG', confidence=0.95, region=(1769, 91, 33, 11))
+    hiq_month_2 = pag.locateCenterOnScreen('hiq_month_2.PNG', confidence=0.95, region=(1769, 91, 33, 11))
+    hiq_month_3 = pag.locateCenterOnScreen('hiq_month_3.PNG', confidence=0.95, region=(1769, 91, 33, 11))
+    hiq_month_4 = pag.locateCenterOnScreen('hiq_month_4.PNG', confidence=0.95, region=(1769, 91, 33, 11))
+    hiq_month_5 = pag.locateCenterOnScreen('hiq_month_5.PNG', confidence=0.95, region=(1769, 91, 33, 11))
+    hiq_month_6 = pag.locateCenterOnScreen('hiq_month_6.PNG', confidence=0.95, region=(1769, 91, 33, 11))
+    hiq_month_7 = pag.locateCenterOnScreen('hiq_month_7.PNG', confidence=0.95, region=(1769, 91, 33, 11))
+    hiq_month_8 = pag.locateCenterOnScreen('hiq_month_8.PNG', confidence=0.95, region=(1769, 91, 33, 11))
+    hiq_month_9 = pag.locateCenterOnScreen('hiq_month_9.PNG', confidence=0.95, region=(1769, 91, 33, 11))
+    hiq_month_10 = pag.locateCenterOnScreen('hiq_month_10.PNG', confidence=0.95, region=(1769, 91, 33, 11))
+    hiq_month_11 = pag.locateCenterOnScreen('hiq_month_11.PNG', confidence=0.95, region=(1769, 91, 33, 11))
+    hiq_month_12 = pag.locateCenterOnScreen('hiq_month_12.PNG', confidence=0.95, region=(1769, 91, 33, 11))
+    if hiq_month_1:
+        return 1
+    elif hiq_month_2:
+        return 2
+    elif hiq_month_3:
+        return 3
+    elif hiq_month_4:
+        return 4
+    elif hiq_month_5:
+        return 5
+    elif hiq_month_6:
+        return 6
+    elif hiq_month_7:
+        return 7
+    elif hiq_month_8:
+        return 8
+    elif hiq_month_9:
+        return 9
+    elif hiq_month_10:
+        return 10
+    elif hiq_month_11:
+        return 11
+    elif hiq_month_12:
+        return 12
+    else:
+        return 0
+    
 def Updown(updown):
+    if keyboard.is_pressed('end'):
+        print('end 눌러 종료합니다.')
+        return
     if updown == 'down':
         pag.click(1332, 905)
         t.sleep(0.5)
@@ -903,47 +986,93 @@ def find_num(where):
     else:
         return 0
 
-def month_check():
+# def month_check():
+#     if keyboard.is_pressed('END'):
+#         return
+#     month1 = pag.locateCenterOnScreen('m1.PNG', confidence=0.95, region=(1600, 52, 326, 245))
+#     month2 = pag.locateCenterOnScreen('m2.PNG', confidence=0.95, region=(1600, 52, 326, 245))
+#     month3 = pag.locateCenterOnScreen('m3.PNG', confidence=0.95, region=(1600, 52, 326, 245))
+#     month4 = pag.locateCenterOnScreen('m4.PNG', confidence=0.95, region=(1600, 52, 326, 245))
+#     month5 = pag.locateCenterOnScreen('m5.PNG', confidence=0.95, region=(1600, 52, 326, 245))
+#     month6 = pag.locateCenterOnScreen('m6.PNG', confidence=0.95, region=(1600, 52, 326, 245))
+#     month7 = pag.locateCenterOnScreen('m7.PNG', confidence=0.95, region=(1600, 52, 326, 245))
+#     month8 = pag.locateCenterOnScreen('m8.PNG', confidence=0.95, region=(1600, 52, 326, 245))
+#     month9 = pag.locateCenterOnScreen('m9.PNG', confidence=0.95, region=(1600, 52, 326, 245))
+#     month10 = pag.locateCenterOnScreen('m10.PNG', confidence=0.95, region=(1600, 52, 326, 245))
+#     month11 = pag.locateCenterOnScreen('m11.PNG', confidence=0.95, region=(1600, 52, 326, 245))
+#     month12 = pag.locateCenterOnScreen('m12.PNG', confidence=0.95, region=(1600, 52, 326, 245))
+#     if month1:
+#         return 1
+#     elif month2:
+#         return 2
+#     elif month3:
+#         return 3
+#     elif month4:
+#         return 4
+#     elif month5:
+#         return 5
+#     elif month6:
+#         return 6
+#     elif month7:
+#         return 7
+#     elif month8:
+#         return 8
+#     elif month9:
+#         return 9
+#     elif month10:
+#         return 10
+#     elif month11:
+#         return 11
+#     elif month12:
+#         return 12
+#     else:
+#         return 0
+
+def hiq_click_month(month, check_month):
     if keyboard.is_pressed('END'):
         return
-    month1 = pag.locateCenterOnScreen('m1.PNG', confidence=0.95, region=(1600, 52, 326, 245))
-    month2 = pag.locateCenterOnScreen('m2.PNG', confidence=0.95, region=(1600, 52, 326, 245))
-    month3 = pag.locateCenterOnScreen('m3.PNG', confidence=0.95, region=(1600, 52, 326, 245))
-    month4 = pag.locateCenterOnScreen('m4.PNG', confidence=0.95, region=(1600, 52, 326, 245))
-    month5 = pag.locateCenterOnScreen('m5.PNG', confidence=0.95, region=(1600, 52, 326, 245))
-    month6 = pag.locateCenterOnScreen('m6.PNG', confidence=0.95, region=(1600, 52, 326, 245))
-    month7 = pag.locateCenterOnScreen('m7.PNG', confidence=0.95, region=(1600, 52, 326, 245))
-    month8 = pag.locateCenterOnScreen('m8.PNG', confidence=0.95, region=(1600, 52, 326, 245))
-    month9 = pag.locateCenterOnScreen('m9.PNG', confidence=0.95, region=(1600, 52, 326, 245))
-    month10 = pag.locateCenterOnScreen('m10.PNG', confidence=0.95, region=(1600, 52, 326, 245))
-    month11 = pag.locateCenterOnScreen('m11.PNG', confidence=0.95, region=(1600, 52, 326, 245))
-    month12 = pag.locateCenterOnScreen('m12.PNG', confidence=0.95, region=(1600, 52, 326, 245))
-    if month1:
-        return 1
-    elif month2:
-        return 2
-    elif month3:
-        return 3
-    elif month4:
-        return 4
-    elif month5:
-        return 5
-    elif month6:
-        return 6
-    elif month7:
-        return 7
-    elif month8:
-        return 8
-    elif month9:
-        return 9
-    elif month10:
-        return 10
-    elif month11:
-        return 11
-    elif month12:
-        return 12
-    else:
-        return 0
+
+    to_go_month = month
+    cur_month = check_month
+
+    for i in range(0, 12, 1):
+        if(to_go_month > cur_month):      # 목표 월이 더 크면?
+            pag.click(1840, 96)  # 다음 달로 넘겨!
+            t.sleep(0.1)
+            pag.moveTo(1838, 319)
+            t.sleep(0.5)
+            if(to_go_month == hiq_month_check()):
+                return
+        else:                            # 목표 월이 더 작으면?
+            pag.click(1698, 96)  # 이전 달로 넘겨!
+            t.sleep(0.1)
+            pag.moveTo(1838, 319)
+            t.sleep(0.5)
+            if (to_go_month == hiq_month_check()):
+                return
+
+def hiq_click_year(year, check_year):
+    if keyboard.is_pressed('END'):
+        return
+
+    to_go_year = year
+    cur_year = check_year
+
+    for i in range(0, 6, 1):
+        if(to_go_year > cur_year):      # 목표 연도가 더 크면?
+            pag.click(1875, 96)  # 다음 해로 넘겨!
+            t.sleep(0.1)
+            pag.moveTo(1838,319)
+            t.sleep(0.5)
+            if(to_go_year == hiq_year_check()):
+                return
+        else:                            # 목표 연도가 더 작으면?
+            pag.click(1664, 96)  # 이전 달로 넘겨!
+            t.sleep(0.1)
+            pag.moveTo(1838, 319)
+            t.sleep(0.5)
+            if (to_go_year == hiq_year_check()):
+                return
 
 
 while True:                # 여기서부터 돌립니다
@@ -968,37 +1097,18 @@ while True:                # 여기서부터 돌립니다
         if keyboard.is_pressed('end'):
             print('end 눌러 종료합니다.')
             break
+
+        hiq_ready()   # 완료환자 클릭하기
+
         # 달력의 년, 월 확인
-        year2021 = pag.locateCenterOnScreen('year2021.PNG', confidence=0.92)
-        year2022 = pag.locateCenterOnScreen('year2022.PNG', confidence=0.92)
-        year2023 = pag.locateCenterOnScreen('year2023.PNG', confidence=0.92)
+        cur_year = hiq_year_check()   # 목표년도인지 확인
+        print('cur_year:', cur_year)
+        if not (yy == cur_year):
+            hiq_click_year(yy, cur_year)   # 아니면 목표년도로 돌려!
 
-        if (yy == 2022):
-            if (year2022):
-                print('')
-            elif (year2021):
-                pag.click(1869, 93)
-                pag.moveTo(1758, 63)
-                t.sleep(0.5)
-            elif (year2023):
-                pag.click(1663, 98)
-                pag.moveTo(1758, 63)
-                t.sleep(0.5)
-            else:
-                print('error! 년도가 안맞아요')
-                break
-
-        k = month_check()
-        # print('k:', k, 'mm', mm)
-        if not (k == mm):
-            pag.click(1838, 95) # > click
-            pag.moveTo(1758, 63)
-            t.sleep(0.5)
-            k = month_check()
-            t.sleep(0.5)
-            if not (k == mm):
-                print('T_T')
-                break
+        cur_month = hiq_month_check()    # 목표월인지 확인
+        if not (mm == cur_month):
+            hiq_click_month(mm, cur_month)    # 아니면 목표월로 돌려!
 
         print('기준(현재)날짜:', get_date(yy, mm, dd).strftime('%Y-%m-%d'))
         # what_week = get_week_no(yy, mm, dd)

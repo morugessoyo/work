@@ -171,11 +171,77 @@ from PIL import ImageGrab, Image
 # print(time2.month)
 # print(time2.day)
 # print(type(time2.day))
+#
+#
+# s5117 = pag.locateCenterOnScreen('s5117.png', confidence=0.92, region=(508, 76, 782, 854))
+# s5119 = pag.locateCenterOnScreen('s5119.png', confidence=0.92, region=(508, 76, 782, 854))
+# print('s5117:', s5117)
+# print('s5119:', s5119)
+# x = s5117[0] + 495
+# print('x:', x, '?', s5117[1])
 
 
-s5117 = pag.locateCenterOnScreen('s5117.png', confidence=0.92, region=(508, 76, 782, 854))
-s5119 = pag.locateCenterOnScreen('s5119.png', confidence=0.92, region=(508, 76, 782, 854))
-print('s5117:', s5117)
-print('s5119:', s5119)
-x = s5117[0] + 495
-print('x:', x, '?', s5117[1])
+# path = r"C:\work\crm_adm.png"
+# pag.screenshot(path, region=(left_top[0], left_top[1], right_bottom[0], right_bottom[1]))
+# pag.screenshot(path, region=(left_top[0], left_top[1], capture_width, capture_height))
+# t.sleep(1)
+# pag.click(184, 89)
+# t.sleep(1)
+
+# for i in range(0, 6, 1):
+#     path = r"C:\work\hiq_year_" + str(i + 1) + ".png"
+#     pag.screenshot(path, region=(1732, 91, 33,11))
+#     t.sleep(1)
+#     pag.click(1875,96) # 다음 해로 넘겨!
+#     t.sleep(0.1)
+#     pag.moveTo(1838,319)
+#     t.sleep(0.5)
+
+# for i in range(0, 12, 1):
+#     path = r"C:\work\hiq_month_" + str(i + 1) + ".png"
+#     pag.screenshot(path, region=(1769, 91, 33, 11))
+#     t.sleep(1)
+#     pag.click(1840, 96)  # 다음 달로 넘겨!
+#     t.sleep(0.1)
+#     pag.moveTo(1838, 319)
+#     t.sleep(0.5)
+
+hiq_month_1 = pag.locateCenterOnScreen('hiq_month_1.PNG', confidence=0.95, region=(1769, 91, 33, 11))
+hiq_month_2 = pag.locateCenterOnScreen('hiq_month_2.PNG', confidence=0.95, region=(1769, 91, 33, 11))
+hiq_month_3 = pag.locateCenterOnScreen('hiq_month_3.PNG', confidence=0.95, region=(1769, 91, 33, 11))
+hiq_month_4 = pag.locateCenterOnScreen('hiq_month_4.PNG', confidence=0.95, region=(1769, 91, 33, 11))
+hiq_month_5 = pag.locateCenterOnScreen('hiq_month_5.PNG', confidence=0.95, region=(1769, 91, 33, 11))
+hiq_month_6 = pag.locateCenterOnScreen('hiq_month_6.PNG', confidence=0.95, region=(1769, 91, 33, 11))
+hiq_month_7 = pag.locateCenterOnScreen('hiq_month_7.PNG', confidence=0.95, region=(1769, 91, 33, 11))
+hiq_month_8 = pag.locateCenterOnScreen('hiq_month_8.PNG', confidence=0.95, region=(1769, 91, 33, 11))
+hiq_month_9 = pag.locateCenterOnScreen('hiq_month_9.PNG', confidence=0.95, region=(1769, 91, 33, 11))
+hiq_month_10 = pag.locateCenterOnScreen('hiq_month_10.PNG', confidence=0.95, region=(1769, 91, 33, 11))
+hiq_month_11 = pag.locateCenterOnScreen('hiq_month_11.PNG', confidence=0.95, region=(1769, 91, 33, 11))
+hiq_month_12 = pag.locateCenterOnScreen('hiq_month_12.PNG', confidence=0.95, region=(1769, 91, 33, 11))
+if hiq_month_1:
+    print(' 1')
+elif hiq_month_2:
+    print(' 2')
+elif hiq_month_3:
+    print(' 3')
+elif hiq_month_4:
+    print(' 4')
+elif hiq_month_5:
+    print(' 5')
+elif hiq_month_6:
+    print(' 6')
+elif hiq_month_7:
+    print(' 7')
+elif hiq_month_8:
+    print(' 8')
+elif hiq_month_9:
+    print(' 9')
+elif hiq_month_10:
+    print(' 10')
+elif hiq_month_11:
+    print(' 11')
+elif hiq_month_12:
+    print(' 12')
+else:
+    print(' 0')
+

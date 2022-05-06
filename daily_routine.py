@@ -48,7 +48,7 @@ def click_date(day_day, what_week):  # CRM 화면 왼쪽 위에 펼쳐져있는 
     # print('day_day:', day_day + 1,' what_week:', what_week)
     # print('달력 클릭위치는:', 1631 + ((day_day + 1) % 7) * 40, 155 + (what_week * 25))
     # print('달력 클릭:', 46 + ((day_day + 1) % 7) * 20, 127 + (what_week * 16))
-    t.sleep(1)
+    t.sleep(2)
     return
 
 def clear_screen():
@@ -221,19 +221,22 @@ def hiq_on_check():
         print('수납집계 창이 아니여...')
         return False
 
+
 def crm_surgery_only():
     if keyboard.is_pressed('END'):
         return
 
-    cond_surgery = pag.locateCenterOnScreen('c_surgery.PNG', confidence=0.9, region=(84, 222, 147, 99))
-    c_today = pag.locateCenterOnScreen('c_surgery.PNG', confidence=0.9, region=(84, 222, 147, 99))
+    cond_surgery = pag.locateCenterOnScreen('c_surgery.PNG', confidence=0.92, region=(84, 222, 147, 99))
+    cond_surgery1 = pag.locateCenterOnScreen('c_surgery1.PNG', confidence=0.92, region=(46, 259, 53, 41))
+    c_today = pag.locateCenterOnScreen('c_today.PNG', confidence=0.92, region=(205, 69, 62, 94))
     if not (c_today):
-        crm_schedule = pag.locateCenterOnScreen('a_crm_schedule.PNG', confidence=0.9)
+        crm_schedule = pag.locateCenterOnScreen('a_crm_schedule.PNG', confidence=0.92)
         pag.click(crm_schedule)
-    t.sleep(1)
+    t.sleep(0.5)
     # CRM 켜진 상태에서 '수술'클릭확인
-    if (cond_surgery):  # '수술' 클릭 안되어있으면?
-        pag.click(cond_surgery)  # 클릭하고 갑시다
+    if (cond_surgery1):  # '수술' 클릭 안되어있으면?
+        pag.click(cond_surgery1)  # 클릭하고 갑시다
+        t.sleep(1)
     return
 
 def click_start_date(yy,mm,dd):
@@ -358,13 +361,15 @@ while True:  # 루프문 들어와써요!
         day_day = get_date(yy, mm, dd).weekday()    # 몇번째날?
         # print(what_week - 1, '번째 주의 ', day_day, '째날이예요')
         click_date(day_day, what_week - 1)
+        t.sleep(1)
 
         no_surgery_day = pag.locateCenterOnScreen('c_no_surgery_day.PNG', confidence=0.98, region=(12, 331, 178, 76))
-
-        if (no_surgery_day):
-            if keyboard.is_pressed('end'):
-                print('end 눌러 종료합니다.')
-                break
+        crm_no_schedule = pag.locateCenterOnScreen('c_crm_no_schedule.PNG', confidence=0.95, region=(203,173,1162,87))
+        if (no_surgery_day) or (crm_no_schedule):
+            # if(no_surgery_day):
+            #     print('수술 : 0 0 0')
+            # elif(crm_no_schedule):
+            #     print('크고 흰 공백!')
             print("오늘은 수술이 없어요")
         else:
             if keyboard.is_pressed('end'):
@@ -404,7 +409,7 @@ while True:  # 루프문 들어와써요!
 
             file_dir_name = 'G:/작업/011_수술정리/crm/'
             wb = xw.Book('C:\\Users\\onnuri\\Documents\\crm\\2019-05-01.xlsm')
-            my_macro = wb.macro('수술자2')   # 매크로 이름 여기에 넣어요
+            my_macro = wb.macro('수술자3')   # 매크로 이름 여기에 넣어요
             wb1 = xw.Book(file_dir_name + cur_date+'.xls')
             my_macro()                     # 매크로 돌려요
             t.sleep(0.5)
@@ -416,22 +421,30 @@ while True:  # 루프문 들어와써요!
             t.sleep(3)
             print('CRM 수술자 목록 저장 완료:'+file_dir_name+cur_date+'.xls')
 
-            # 2. 하이큐 일일장부 만들어요
-            hiq_on_check()
-            t.sleep(0.5)
-            print('하이큐 기준(현재)날짜:', get_date(yy, mm, dd).strftime('%Y-%m-%d'))
+        # 2. 하이큐 일일장부 만들어요
+        hiq_on_check()
+        t.sleep(0.5)
+        print('하이큐 기준(현재)날짜:', get_date(yy, mm, dd).strftime('%Y-%m-%d'))
 
-            y1 = str(yy)
-            m1 = str(mm)
-            d1 = str(dd)
+        y1 = str(yy)
+        m1 = str(mm)
+        d1 = str(dd)
 
-            # 여기부터 돌려요
-            cc = get_date(yy, mm, dd).year
-            bb = get_date(yy, mm, dd).month
-            aa = get_date(yy, mm, dd).day
-            # print('year?:', cc, 'month?:', bb, 'day?:', aa)
+        # 여기부터 돌려요
+        cc = get_date(yy, mm, dd).year
+        bb = get_date(yy, mm, dd).month
+        aa = get_date(yy, mm, dd).day
+        # print('year?:', cc, 'month?:', bb, 'day?:', aa)
 
-            click_start_date(y1, m1, d1)
+        click_start_date(y1, m1, d1)
+        t.sleep(2)
+        no_income = pag.locateCenterOnScreen('h_no_income.PNG', confidence=0.98, region=(42, 257, 1760, 198))  # 0.000이 많은 회색 창! = 수입없음
+        if (no_income):   # 수입이 없잖아?
+            print('수입이 없는 날입니다.')
+        else:             # 수입이 있군!
+            if keyboard.is_pressed('end'):
+                print('end 눌러 종료합니다.')
+                break
             copy_and_paste()
             search1 = pag.locateCenterOnScreen('z_search.PNG', confidence=0.9)
             pag.click(search1)  # 조회 클릭
@@ -487,30 +500,30 @@ while True:  # 루프문 들어와써요!
             # 여기까지 엑셀 저장 + 매크로 작업 완료!
 
 
-            # 달의 마지막 날짜면 ... 다음달로!
-            date = get_date(yy, mm, dd)
-            last_day = calendar.monthrange(date.year, date.month)[1]
-            last_day1 = get_date(yy, mm, last_day)
+        # 달의 마지막 날짜면 ... 다음달로!
+        date = get_date(yy, mm, dd)
+        last_day = calendar.monthrange(date.year, date.month)[1]
+        last_day1 = get_date(yy, mm, last_day)
 
-            if (date == last_day1):
-                crm_on_check()      # CRM 켜져있는지 다시 확인!
-                t.sleep(1)
-                pag.click(185, 94)  # CRM에서 달력의 다음달(>) 버튼 클릭해요
-                if ((mm + 1) % 12 == 0):
-                    mm = 12
-                    dd = 1
-                elif ((mm + 1) % 12 == 1):
-                    yy = yy + 1
-                    mm = (mm + 1) % 12
-                    dd = 1
-                else:
-                    mm = (mm + 1) % 12
-                    dd = 1
-            else:
-                dd = dd + 1
-
+        if (date == last_day1):
+            crm_on_check()      # CRM 켜져있는지 다시 확인!
             t.sleep(1)
-            if (i + 1) != days_to_go:
-                print('다음 날짜로 진행합니다.')
+            pag.click(185, 94)  # CRM에서 달력의 다음달(>) 버튼 클릭해요
+            if ((mm + 1) % 12 == 0):
+                mm = 12
+                dd = 1
+            elif ((mm + 1) % 12 == 1):
+                yy = yy + 1
+                mm = (mm + 1) % 12
+                dd = 1
+            else:
+                mm = (mm + 1) % 12
+                dd = 1
+        else:
+            dd = dd + 1
+
+        t.sleep(1)
+        if (i + 1) != days_to_go:
+            print('다음 날짜로 진행합니다.')
     print('사이클 완료!')
     break
