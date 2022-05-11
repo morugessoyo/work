@@ -22,6 +22,12 @@ user32 = ctypes.windll.user32
 pix_status_line = (210, 210, 210)   # 회색 줄이 없으면 환자가 엄서요!
 
 crm_password = '38tkfdl!'
+past_data = True     # 하루만 돌리고 싶거든 사용합시다
+past_yy = 2022
+past_mm = 5
+past_dd = 9         # 하루만 돌릴 날짜 지정!
+
+hyoo_gaa = 0       # 휴가 다녀왔거나 공휴일 있으면 숫자 바꾸기
 
 def get_week_of_month(year, month, day):
     x = np.array(calendar.monthcalendar(year, month))
@@ -286,11 +292,8 @@ def normalize(s): # 콤마 없애주세요 흑흑 ※
 
 
 # 여기서부터 실제 코드!
-past_data = False     # 하루만 돌리고 싶거든 사용합시다
-hyoo_gaa = 0       # 휴가 다녀왔으면 숫자 바꾸기
-
 if (past_data):
-    today = date(2022, 4, 1)
+    today = date(past_yy, past_mm, past_dd)
     yy = today.year
     mm = today.month
     dd = today.day
@@ -437,7 +440,7 @@ while True:  # 루프문 들어와써요!
         # print('year?:', cc, 'month?:', bb, 'day?:', aa)
 
         click_start_date(y1, m1, d1)
-        t.sleep(2)
+        t.sleep(4)
         no_income = pag.locateCenterOnScreen('h_no_income.PNG', confidence=0.98, region=(42, 257, 1760, 198))  # 0.000이 많은 회색 창! = 수입없음
         if (no_income):   # 수입이 없잖아?
             print('수입이 없는 날입니다.')
@@ -448,7 +451,7 @@ while True:  # 루프문 들어와써요!
             copy_and_paste()
             search1 = pag.locateCenterOnScreen('z_search.PNG', confidence=0.9)
             pag.click(search1)  # 조회 클릭
-            t.sleep(3)
+            t.sleep(5)
             # print('조회클릭')
             pag.click(103, 333)  # 내용 클릭
             t.sleep(0.3)
@@ -470,7 +473,7 @@ while True:  # 루프문 들어와써요!
             t.sleep(0.5)
             df = pd.DataFrame(pd.read_csv('clipboard.txt', sep='	'))  # 1번!!! df에다가 데이타 저장
 
-            print('기준(현재)날짜:', get_date(yy, mm, dd))
+            print('기준(현재)날짜:', get_date(yy, mm, dd).strftime('%Y-%m-%d'))
 
             # 엑셀파일 열어요
             wb = openpyxl.Workbook()  # workbook 만들기
@@ -499,6 +502,7 @@ while True:  # 루프문 들어와써요!
             print('하이큐 일일장부 작성 완료:' + file_dir_name + cur_date + '.xlsx')
             # 여기까지 엑셀 저장 + 매크로 작업 완료!
 
+        # ---------------------------------------------------------------------------------------------------
 
         # 달의 마지막 날짜면 ... 다음달로!
         date = get_date(yy, mm, dd)

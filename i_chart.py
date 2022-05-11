@@ -39,15 +39,69 @@ def adm_check():
     else:
         print('에러예요!')
         return 0
+def hiq_on_check():
+    if keyboard.is_pressed('END'):
+        return
+    find_hiq = pag.locateCenterOnScreen('d_find_hiq.PNG', confidence=0.95, region=(105, 1038, 717, 42))
+    hiq_icon = pag.locateCenterOnScreen('d_hiq_off.PNG', confidence=0.95, region=(105, 1038, 717, 42))
+    if (hiq_icon):    # 접수/수납프로그램 켜져있음(아이콘있음)
+        pag.click(hiq_icon)
+        t.sleep(1)
+        hiq_jeopsoo = pag.locateCenterOnScreen('d_hiq_jeopsoo.PNG', confidence=0.95)
+        if (hiq_jeopsoo):   # 접수등록탭 꺼져있음
+            pag.click(hiq_jeopsoo)     # 여기까지 하면 접수등록탭 파란불 들어온 화면이 되지요!
+            t.sleep(3)
+    elif (find_hiq):   # 메인메뉴만 켜져있음(아이콘있음)
+        pag.click(find_hiq)
+        t.sleep(1)
+        hiq_soonap = pag.locateCenterOnScreen('d_hiq_soonap.PNG', confidence=0.9, region=(305, 111, 1106, 719))
+        if (hiq_soonap):      # 메인메뉴에서 수납버튼 클릭
+            pag.click(hiq_soonap)
+            t.sleep(10)
+            # hiq_jeopsoo_on = pag.locateCenterOnScreen('d_hiq_jeopsoo_on.PNG', confidence=0.9)
+            hiq_jeopsoo = pag.locateCenterOnScreen('d_hiq_jeopsoo.PNG', confidence=0.9)  # 필요없을 것 같지만 '접수등록'(파란바탕) 확인용
+            if (hiq_jeopsoo):     # 수납/등록창 띄워졌는데 접수등록에 파란불이 안들어와있다?
+                pag.click(hiq_jeopsoo)
+                t.sleep(1)   # 여기까지 하면 접수등록창 띄워져있다
+        else:
+            print('왜 수납아이콘 없지')
+            return False
+    else:
+        print('프로그램 켜야해')
+        return False
 
 def hiq_ready():
     if keyboard.is_pressed('end'):
         print('end 눌러 종료합니다.')
         return
-    hiq_finished_list = pag.locateCenterOnScreen('h_finished_list.PNG', confidence=0.98, region=(1294,333,493,30))
-    if (hiq_finished_list):   # 완료 회색바탕이야?
-        pag.click(hiq_finished_list)
-        return
+    find_hiq = pag.locateCenterOnScreen('d_find_hiq.PNG', confidence=0.95, region=(105, 1038, 717, 42))
+    hiq_icon = pag.locateCenterOnScreen('d_hiq_off.PNG', confidence=0.95, region=(105, 1038, 717, 42))
+    if (hiq_icon):  # 접수/수납프로그램 켜져있음(아이콘있음)
+        pag.click(hiq_icon)
+        t.sleep(1)
+        hiq_not_chart = pag.locateCenterOnScreen('h_not_chart.PNG', confidence=0.98, region=(75, 53, 98, 30))
+        if (hiq_not_chart):  # (외래)진료차트 버튼이 회색이야? 선택안됐엉?
+            pag.click(hiq_not_chart)
+        hiq_finished_list = pag.locateCenterOnScreen('h_finished_list.PNG', confidence=0.98, region=(1294, 333, 493, 30))
+        if (hiq_finished_list):  # 완료 회색바탕이야?
+            pag.click(hiq_finished_list)
+    elif (find_hiq):  # 메인메뉴만 켜져있음(아이콘있음)
+        pag.click(find_hiq)
+        t.sleep(1)
+        hiq_not_chart = pag.locateCenterOnScreen('h_not_chart.PNG', confidence=0.98, region=(75, 53, 98, 30))
+        if (hiq_not_chart):  # (외래)진료차트 버튼이 회색이야? 선택안됐엉?
+            pag.click(hiq_not_chart)
+        hiq_finished_list = pag.locateCenterOnScreen('h_finished_list.PNG', confidence=0.98, region=(1294, 333, 493, 30))
+        if (hiq_finished_list):  # 완료 회색바탕이야?
+            pag.click(hiq_finished_list)
+        else:
+            print('왜 수납아이콘 없지')
+            return False
+    else:
+        print('프로그램 켜야해')
+        return False
+
+
 
 def position_check():
     if keyboard.is_pressed('end'):
