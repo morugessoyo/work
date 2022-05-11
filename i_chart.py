@@ -13,12 +13,12 @@ pix_status_line = (210, 210, 210)
 one_day_only = False
 
 yy = 2022
-mm = 4
-dd = 20
+mm = 5
+dd = 2
 
 end_yy = 2022
 end_mm = 5
-end_dd = 2
+end_dd = 10
 
 # dd_end_date = 11
 
@@ -71,36 +71,79 @@ def hiq_on_check():
         return False
 
 def hiq_ready():
-    if keyboard.is_pressed('end'):
-        print('end 눌러 종료합니다.')
-        return
-    find_hiq = pag.locateCenterOnScreen('d_find_hiq.PNG', confidence=0.95, region=(105, 1038, 717, 42))
-    hiq_icon = pag.locateCenterOnScreen('d_hiq_off.PNG', confidence=0.95, region=(105, 1038, 717, 42))
-    if (hiq_icon):  # 접수/수납프로그램 켜져있음(아이콘있음)
-        pag.click(hiq_icon)
-        t.sleep(1)
-        hiq_not_chart = pag.locateCenterOnScreen('h_not_chart.PNG', confidence=0.98, region=(75, 53, 98, 30))
-        if (hiq_not_chart):  # (외래)진료차트 버튼이 회색이야? 선택안됐엉?
-            pag.click(hiq_not_chart)
-        hiq_finished_list = pag.locateCenterOnScreen('h_finished_list.PNG', confidence=0.98, region=(1294, 333, 493, 30))
-        if (hiq_finished_list):  # 완료 회색바탕이야?
-            pag.click(hiq_finished_list)
-    elif (find_hiq):  # 메인메뉴만 켜져있음(아이콘있음)
-        pag.click(find_hiq)
-        t.sleep(1)
-        hiq_not_chart = pag.locateCenterOnScreen('h_not_chart.PNG', confidence=0.98, region=(75, 53, 98, 30))
-        if (hiq_not_chart):  # (외래)진료차트 버튼이 회색이야? 선택안됐엉?
-            pag.click(hiq_not_chart)
-        hiq_finished_list = pag.locateCenterOnScreen('h_finished_list.PNG', confidence=0.98, region=(1294, 333, 493, 30))
-        if (hiq_finished_list):  # 완료 회색바탕이야?
-            pag.click(hiq_finished_list)
-        else:
-            print('왜 수납아이콘 없지')
-            return False
-    else:
-        print('프로그램 켜야해')
-        return False
+    while True:
+        if keyboard.is_pressed('END'):
+            return
 
+        hiq_jinryo = pag.locateCenterOnScreen('d_hiq_jinryo.PNG', confidence=0.98, region=(75, 53, 98, 30))  # 진료차트 파란불 들어왔나?
+        find_hiq = pag.locateCenterOnScreen('d_find_hiq.PNG', confidence=0.98, region=(105, 1038, 717, 42))
+        hiq_icon = pag.locateCenterOnScreen('d_hiq_off.PNG', confidence=0.98, region=(105, 1038, 717, 42))
+        hiq_finished_list_off = pag.locateCenterOnScreen('d_hiq_finished_list_off.PNG', confidence=0.98, region=(1294, 333, 493, 30))
+        hiq_finished_list_on = pag.locateCenterOnScreen('d_hiq_finished_list_on.PNG', confidence=0.98, region=(1294, 333, 493, 30))
+        hiq_jinryo_menu = pag.locateCenterOnScreen('d_hiq_jinryo_menu.PNG', confidence=0.9, region=(8, 24, 218, 28))  # 필요없을 것 같지만 '진료차트' 메뉴 선택
+
+        if hiq_jinryo and hiq_finished_list_on:
+            return print('화면 준비 완료')
+
+        if hiq_finished_list_off and not hiq_finished_list_on:    # 완료() 버튼에 파란불 아니고 회색불 들어와있다?
+            pag.click(hiq_finished_list_off)
+            t.sleep(0.5)
+            return print('화면 준비됨')
+
+        if not hiq_jinryo_menu:    # 화면에 접수등록회색바탕메뉴가 없다면?
+            hiq_soonap = pag.locateCenterOnScreen('d_hiq_soonap.PNG', confidence=0.98, region=(305, 111, 1106, 719))
+            if hiq_soonap:  # 메인메뉴에서 '접수.수납'버튼 클릭
+                pag.click(hiq_soonap)  # 수납/접수창 띄워짐.. 좀 오래걸령
+                # print('수납/접수창 띄우는 중')
+                for i in range(0, 11, 1):
+                    t.sleep(1)
+                    # print(i+1)
+                    hiq_magam = pag.locateCenterOnScreen('d_hiq_magam.PNG', confidence=0.98)
+                    if (hiq_magam):  # 접수등록 창에 마감관리버튼 보인다!
+                        # print('!')
+                        break
+            else:
+                # print('수납접수가 엄서, 작업표시줄에 하이큐 아이콘 클릭해')
+                pag.click(find_hiq)
+                t.sleep(1)
+        else:
+            pag.click(hiq_jinryo_menu)
+            for i in range(0, 11, 1):
+                t.sleep(1)
+                # print(i + 1)
+                hiq_jinryo = pag.locateCenterOnScreen('d_hiq_jinryo.PNG', confidence=0.98, region=(75, 53, 98, 30))  # 진료차트 파란불 들어왔나?
+                if hiq_jinryo:
+                    # print('!')
+                    break
+
+# def hiq_ready():
+#     if keyboard.is_pressed('end'):
+#         print('end 눌러 종료합니다.')
+#         return
+#
+#     while True:
+#         hiq_jinryo = pag.locateCenterOnScreen('d_hiq_jinryo.PNG', confidence=0.95, region=(75, 53, 98, 30)) # 진료차트 파란불 들어왔나?
+#         if hiq_jinryo:
+#             return print('화면 준비 완료')
+#
+#         hiq_finished_list = pag.locateCenterOnScreen('h_finished_list.PNG', confidence=0.98, region=(1294, 333, 493, 30))
+#         if (hiq_finished_list):  # 완료 회색바탕이야?
+#             pag.click(hiq_finished_list)
+#
+#         hiq_not_chart = pag.locateCenterOnScreen('h_not_chart.PNG', confidence=0.98, region=(75, 53, 98, 30))
+#         if (hiq_not_chart):  # (외래)진료차트 버튼이 회색이야? 선택안됐엉?
+#             pag.click(hiq_not_chart)
+#
+#         hiq_icon = pag.locateCenterOnScreen('d_hiq_off.PNG', confidence=0.95, region=(105, 1038, 717, 42))
+#         if (hiq_icon):  # 접수/수납프로그램 켜져있음(아이콘있음)
+#             pag.click(hiq_icon)
+#
+#         find_hiq = pag.locateCenterOnScreen('d_find_hiq.PNG', confidence=0.95, region=(105, 1038, 717, 42))
+#         if (find_hiq):  # 메인메뉴만 켜져있음(아이콘있음)
+#             pag.click(find_hiq)
+#         else:
+#             print('프로그램 켜야해')
+#             return False
 
 
 def position_check():
