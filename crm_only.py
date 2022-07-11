@@ -22,10 +22,14 @@ user32 = ctypes.windll.user32
 pix_status_line = (210, 210, 210)   # 회색 줄이 없으면 환자가 엄서요!
 
 crm_password = '38tkfdl!'
-past_data = False     # 하루만 돌리고 싶거든 사용합시다
-past_yy = 2022
+past_data = True     # 하루만 돌리고 싶거든 사용합시다
+past_yy = 2014
 past_mm = 6
-past_dd = 28         # 하루만 돌릴 날짜 지정!
+past_dd = 1         # 하루만 돌릴 날짜 지정!
+past_yy_end = 2021
+past_mm_end = 12
+past_dd_end = 31         # 하루만 돌릴 날짜 지정!
+
 
 hyoo_gaa = 0       # 휴가 다녀왔거나 공휴일 있으면 숫자 바꾸기
 
@@ -155,18 +159,18 @@ def crm_month_check():
     if keyboard.is_pressed('END'):
         return
 
-    crm_1 = pag.locateCenterOnScreen('crm_1.PNG', confidence=0.95, region=(74, 85, 67, 16))
-    crm_2 = pag.locateCenterOnScreen('crm_2.PNG', confidence=0.95, region=(74, 85, 67, 16))
-    crm_3 = pag.locateCenterOnScreen('crm_3.PNG', confidence=0.95, region=(74, 85, 67, 16))
-    crm_4 = pag.locateCenterOnScreen('crm_4.PNG', confidence=0.95, region=(74, 85, 67, 16))
-    crm_5 = pag.locateCenterOnScreen('crm_5.PNG', confidence=0.95, region=(74, 85, 67, 16))
-    crm_6 = pag.locateCenterOnScreen('crm_6.PNG', confidence=0.95, region=(74, 85, 67, 16))
-    crm_7 = pag.locateCenterOnScreen('crm_7.PNG', confidence=0.95, region=(74, 85, 67, 16))
-    crm_8 = pag.locateCenterOnScreen('crm_8.PNG', confidence=0.95, region=(74, 85, 67, 16))
-    crm_9 = pag.locateCenterOnScreen('crm_9.PNG', confidence=0.95, region=(74, 85, 67, 16))
-    crm_10 = pag.locateCenterOnScreen('crm_10.PNG', confidence=0.95, region=(74, 85, 67, 16))
-    crm_11 = pag.locateCenterOnScreen('crm_11.PNG', confidence=0.95, region=(74, 85, 67, 16))
-    crm_12 = pag.locateCenterOnScreen('crm_12.PNG', confidence=0.98, region=(73, 85, 67, 16))
+    crm_1 = pag.locateCenterOnScreen('crm_1.PNG', confidence=0.95, region=(74, 85, 57, 13))
+    crm_2 = pag.locateCenterOnScreen('crm_2.PNG', confidence=0.95, region=(74, 85, 57, 13))
+    crm_3 = pag.locateCenterOnScreen('crm_3.PNG', confidence=0.95, region=(74, 85, 57, 13))
+    crm_4 = pag.locateCenterOnScreen('crm_4.PNG', confidence=0.95, region=(74, 85, 57, 13))
+    crm_5 = pag.locateCenterOnScreen('crm_5.PNG', confidence=0.95, region=(74, 85, 57, 13))
+    crm_6 = pag.locateCenterOnScreen('crm_6.PNG', confidence=0.95, region=(74, 85, 57, 13))
+    crm_7 = pag.locateCenterOnScreen('crm_7.PNG', confidence=0.95, region=(74, 85, 57, 13))
+    crm_8 = pag.locateCenterOnScreen('crm_8.PNG', confidence=0.95, region=(74, 85, 57, 13))
+    crm_9 = pag.locateCenterOnScreen('crm_9.PNG', confidence=0.95, region=(74, 85, 57, 13))
+    crm_10 = pag.locateCenterOnScreen('crm_10.PNG', confidence=0.95, region=(74, 85, 57, 13))
+    crm_11 = pag.locateCenterOnScreen('crm_11.PNG', confidence=0.95, region=(74, 85, 57, 13))
+    crm_12 = pag.locateCenterOnScreen('crm_12.PNG', confidence=0.95, region=(74, 85, 57, 13))
     if crm_1:
         return 1
     elif crm_2:
@@ -200,24 +204,18 @@ def crm_click_month(month, check_month):
 
     to_go_month = month
     cur_month = check_month
-    print('? to_go_month', to_go_month, 'cur_month', cur_month)
 
-    if (to_go_month == cur_month):  # 목표 월이 같으면?
-        print('같은 달인데 왜 왔어?')
-    elif (to_go_month > cur_month):  # 목표 월이 더 크면?
-        print('이번달 아니고 다음달')
-        for i in range(0, to_go_month-cur_month, 1):
-            print(i)
-            pag.click(184, 89)  # 다음달로 보냅시다
+    for i in range(0, 12, 1):
+        if(to_go_month > cur_month):      # 목표 월이 더 크면?
+            pag.click(184, 89)   # 다음달로 보냅시다
             t.sleep(1)
-        return
-    else:
-        print('이번달 아니고 이전달')
-        for i in range(0, cur_month-to_go_month, 1):
-            print(i)
+            if(to_go_month == crm_month_check()):
+                return
+        else:                            # 목표 월이 더 작으면?
             pag.click(24, 92)    # 이전달로 보냅시다
             t.sleep(1)
-        return
+            if (to_go_month == crm_month_check()):
+                return
 
 def hiq_on_check():
     if keyboard.is_pressed('END'):
@@ -401,14 +399,14 @@ while True:  # 루프문 들어와써요!
         t.sleep(1)
         crm_surgery_only()  # 수술자 창인지 확인
         t.sleep(2)
+        if (yy > crm_year_check()):
+            crm_click_month(mm, crm_month_check())
         if (mm > crm_month_check()):
-            print('mm:', mm, 'crm_month_check:', crm_month_check())
+            # print('달:', mm, 'check:', crm_month_check())
             crm_click_month(mm, crm_month_check())
         elif (mm < crm_month_check()):
-            print('mm:', mm, 'crm_month_check:', crm_month_check())
+            # print('달:', mm, 'check:', crm_month_check())
             crm_click_month(mm, crm_month_check())
-        else:
-            print('같은 값인데 왜 들어왔성?')
 
         print('CRM 기준(현재)날짜:', get_date(yy, mm, dd).strftime('%Y-%m-%d'))
         what_week = get_week_of_month(yy, mm, dd)   # 몇째주
@@ -474,86 +472,6 @@ while True:  # 루프문 들어와써요!
             wb.close()
             t.sleep(3)
             print('CRM 수술자 목록 저장 완료:'+file_dir_name+cur_date+'.xls')
-
-        # 2. 하이큐 일일장부 만들어요 --------------------------------------------------------------------------------------
-        hiq_on_check()
-        t.sleep(0.5)
-        print('하이큐 기준(현재)날짜:', get_date(yy, mm, dd).strftime('%Y-%m-%d'))
-
-        y1 = str(yy)
-        m1 = str(mm)
-        d1 = str(dd)
-
-        # 여기부터 돌려요
-        cc = get_date(yy, mm, dd).year
-        bb = get_date(yy, mm, dd).month
-        aa = get_date(yy, mm, dd).day
-        # print('year?:', cc, 'month?:', bb, 'day?:', aa)
-
-        click_start_date(y1, m1, d1)
-        copy_and_paste()
-        search1 = pag.locateCenterOnScreen('z_search.PNG', confidence=0.9)
-        pag.click(search1)  # 조회 클릭
-        t.sleep(5)
-        # print('조회클릭')
-        t.sleep(4)
-        no_income = pag.locateCenterOnScreen('h_no_income.PNG', confidence=0.98, region=(42, 257, 1760, 198))  # 0.000이 많은 회색 창! = 수입없음
-        if (no_income):   # 수입이 없잖아?
-            print('수입이 없는 날입니다.')
-        else:             # 수입이 있군!
-            if keyboard.is_pressed('end'):
-                print('end 눌러 종료합니다.')
-                break
-            pag.click(103, 333)  # 내용 클릭
-            t.sleep(0.3)
-            pag.hotkey('ctrl', 'a')
-            t.sleep(0.3)
-            # print('ctrl a')
-            pag.hotkey('ctrl', 'c')
-            t.sleep(0.3)
-            # print('ctrl c')
-
-            text = pyperclip.paste()  # 얘들아 복사가!! 복사가 돼!!!!
-
-            # 방법4 된다!!!!!!
-            text = normalize(text)
-
-            # clipboard.txt 에 데이터 저장
-            with open('clipboard.txt', 'w', encoding='utf8') as file:  # 클립보드 내용을 txt로 저장
-                file.write(text)  # 잘 저장되네요
-            t.sleep(0.5)
-            df = pd.DataFrame(pd.read_csv('clipboard.txt', sep='	'))  # 1번!!! df에다가 데이타 저장
-
-            print('기준(현재)날짜:', get_date(yy, mm, dd).strftime('%Y-%m-%d'))
-
-            # 엑셀파일 열어요
-            wb = openpyxl.Workbook()  # workbook 만들기
-            cur_date = get_date(yy, mm, dd).strftime('%Y-%m-%d')
-            # print('cur_date:', cur_date)
-            filename = 'G:/작업/010_수납리스트/2022 수납리스트/' + str(cur_date) + '.xlsx'
-            print('파일저장장소+파일이름:', filename)
-            wb.save(filename)  # 엑셀파일 저장하기
-            df.to_excel(filename, index=False)  # 2번!!! 엑셀파일에 내용 저장
-            wb.close()
-            t.sleep(0.5)
-
-            # 엑셀 띄우지 않고 실행!
-            app = xw.App(visible=False)
-            # 여기부터는 일일장부 매크로 돌려용
-            wb3 = xw.Book('C:\\Users\\onnuri\\Documents\\crm\\2022-05-01.xlsm')  # 일일장부 매크로 저장한 파일
-            my_macro = wb3.macro('일일장부서식')
-            file_dir_name = 'G:/작업/010_수납리스트/2022 수납리스트/'
-            wb1 = xw.Book(file_dir_name + cur_date + '.xlsx')
-            my_macro()
-            wb1.save(file_dir_name + cur_date + '.xlsx')
-            wb1.close()
-            t.sleep(0.5)
-            wb3.close()
-            t.sleep(3)
-            print('하이큐 일일장부 작성 완료:' + file_dir_name + cur_date + '.xlsx')
-        #     # 여기까지 엑셀 저장 + 매크로 작업 완료!
-
-        # ---------------------------------------------------------------------------------------------------
 
         # 달의 마지막 날짜면 ... 다음달로!
         date = get_date(yy, mm, dd)

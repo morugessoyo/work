@@ -13,12 +13,12 @@ pix_status_line = (210, 210, 210)
 one_day_only = False
 
 yy = 2022
-mm = 5
-dd = 2
+mm = 6
+dd = 30
 
 end_yy = 2022
-end_mm = 5
-end_dd = 10
+end_mm = 6
+end_dd = 30
 
 # dd_end_date = 11
 
@@ -31,13 +31,13 @@ def adm_check():
     adm = pag.locateCenterOnScreen('h_adm.PNG', confidence=0.98, region=(515, 504, 69, 30))
     not_adm = pag.locateCenterOnScreen('h_not_adm.PNG', confidence=0.98, region=(515, 504, 69, 30))
     if (adm):
-        print('입원환자')
+        # print('입원환자')
         return 1
     elif (not_adm):
-        print('외래환자')
+        # print('외래환자')
         return 2
     else:
-        print('에러예요!')
+        # print('에러예요!')
         return 0
 def hiq_on_check():
     if keyboard.is_pressed('END'):
@@ -186,7 +186,7 @@ def Chunggoo_adm():
     if keyboard.is_pressed('END'):
         return
 
-    print('입원 청구합시다')
+    print('입원 청구')
     dur_clear()
     #s코드 두개
     s5117 = pag.locateCenterOnScreen('s5117.png', confidence=0.92, region=(508, 76, 782, 854))
@@ -245,7 +245,7 @@ def Chunggoo_not_adm():   # 코드에 따라 상병 추가하는 작업하기
     if keyboard.is_pressed('END'):
         return
 
-    print('외래 청구합시다')
+    print('외래 청구')
     dur_clear()
 
     # 상병
@@ -491,7 +491,7 @@ def Chunggoo_not_adm():   # 코드에 따라 상병 추가하는 작업하기
         if (e6670) and (e6674):
             print('6670 + 6674')
             if (e6660):
-                print('6660도 있어')
+                print('6660도 있어-확인필요')
                 # pag.click(e6670)
                 # keyboard.write('0')
                 # pag.hotkey('enter')
@@ -504,31 +504,32 @@ def Chunggoo_not_adm():   # 코드에 따라 상병 추가하는 작업하기
                 pag.hotkey('enter')
                 print('광각안저촬영 with 기본안저촬영이라 지우고 정밀안저검사 추가했어요')
                 point_y = point_y + 22
-                # t.sleep(0.1)
+                t.sleep(0.1)
                 keyboard.write('2')
                 pag.hotkey('enter')
                 # t.sleep(0.1)
-
+        # print('point_y_check', point_y_check, 'point_y', point_y)
         if (point_y == point_y_check):
-            print('추가상병 없음')
             if (hblank):
                 print('상병이 없어서 추가: h193')
                 pag.click(point_x, point_y)
                 keyboard.write('h193')
                 pag.hotkey('enter')
-                t.sleep(0.1)
-                pag.hotkey('F3')
+                t.sleep(0.3)
+                # pag.hotkey('F3')
+                pag.click(390, 995)
                 t.sleep(1)
                 dur_clear()
-                t.sleep(0.1)
+                t.sleep(0.3)
                 return True
             return False
         else:
             print('추가상병 있음')
-            pag.hotkey('F3')
+            # pag.hotkey('F3')
+            pag.click(390, 995)
             t.sleep(1)   # 2에서 1로 바꿔봄
             dur_clear()
-            t.sleep(0.1)
+            t.sleep(1)
             return True
 
 def hiq_year_check():
@@ -603,19 +604,19 @@ def Updown(updown):
         return
     if updown == 'down':
         pag.click(1332, 905)
-        t.sleep(0.5)
+        t.sleep(0.1)
         pag.scroll(-2200) # 2200이면 18명정도 내리는듯
-        t.sleep(1)
+        t.sleep(0.1)
     if updown == 'up':
         pag.click(1332, 905)
-        t.sleep(0.5)
+        t.sleep(0.1)
         pag.scroll(2200)  # 올려욧 올려욧
-        t.sleep(1)
+        t.sleep(0.1)
 
 def pat_clear():
     # print('  ')
     pag.click(70, 989)
-    t.sleep(0.1)
+    # t.sleep(0.1)
 
 def click_pat():
     if keyboard.is_pressed('END'):
@@ -624,10 +625,11 @@ def click_pat():
     pat_exist3 = pag.locateCenterOnScreen('pat_exist3.png', confidence=0.86)  # "진료실(흰바탕)"
     err_durinfo = pag.locateCenterOnScreen('err-durinfo.png', confidence=0.9, region=(1862,407, 66,641)) # dur 안내창 x표
 
+    plus_num = 0
     pat_x = 1390   # pat_x 환자이름클릭 x값
-    pat_y = 440    # pat_y 환자이름클릭 y값
-    pat_no = 1     # pat_no 순번 1부터시작
-    click_position = 0   # click_position 클릭할 순번 0부터시작
+    pat_y = 440 + 21*plus_num    # pat_y 환자이름클릭 y값
+    pat_no = 1 + plus_num     # pat_no 순번 1부터시작
+    click_position = 0 + plus_num   # click_position 클릭할 순번 0부터시작
     check_pat_1st = 0    # check_pat_1st top 자리에 있는 환자번호
 
     if (pat_exist2) or (pat_exist3):
@@ -639,7 +641,7 @@ def click_pat():
 
             if (err_durinfo): # dur 공지사항 팝업 있으면 삭제(화면 오른쪽아래 코너)
                 pag.click(err_durinfo)
-                t.sleep(0.5)
+                t.sleep(0.1)
             # print('o:', o, 'click_position:', click_position)
             screen = ImageGrab.grab()
             pix_status = screen.getpixel((1340, 450 + click_position * 21))  # 1번 환자순서 오른아래코너에 회색코너 있는지 확인(환자가 있어요)
@@ -653,85 +655,33 @@ def click_pat():
                 if (pat_no < 23):     # 1~23번 환자까지는 그냥 돌려용
                     # print('click_position:', click_position)
                     pag.doubleClick(pat_x, pat_y)
-                    print(pat_no,'번째 환자 클릭했어요.')
+                    print(pat_no,'번째 환자')
 
                 if (pat_no == 23):  # 23/45번째 환자 끝나고 나면
                     Updown('up')     # 스크롤을 내려요~ 18명정도
                     Updown('up')     # 스크롤을 내려요~ 18명정도
+                    t.sleep(0.1)
                     Updown('down')   # 스크롤을 내려요~ 18명정도
-
                     check_pat_1st = find_num('top')   # 우선 목록의 첫번째 환자 번호 확인
-                    check_pat_last = find_num('bottom')  # 우선 목록의 마지막 환자 번호 확인
-                    # print('스크롤 후 첫번째환자번호:', check_pat_1st, '마지막환자번호:', check_pat_last)
-
+                    # check_pat_last = find_num('bottom')  # 우선 목록의 마지막 환자 번호 확인
+                    # print('스크롤 후 첫번째환자번호:', check_pat_1st)
                     # print('pat_y:', pat_y)
                     click_position = 23 - check_pat_1st
-
                     # print('23_click_position:', click_position)
                     pat_y = 440+ (21 * (click_position))
                     # print('pat_y', pat_y)
                     # t.sleep(0.1)
-
                     pag.doubleClick(pat_x, pat_y)
-                    print(pat_no,'번째 환자 클릭했어요.')
+                    print(pat_no,'번째 환자')
 
-
-                    # pat_y = pat_y + 21
-                    # click_position = click_position +1
-
-#여기부터
-                if (pat_no == 40):  # 23/45번째 환자 끝나고 나면
-                    Updown('up')  # 스크롤을 올려요~ 18명정도
-                    Updown('up')  # 스크롤을 올려요~ 18명정도
-                    Updown('up')  # 스크롤을 올려요~ 18명정도
-                    Updown('down')  # 스크롤을 내려요~ 18명정도
-                    Updown('down')  # 스크롤을 내려요~ 18명정도
-
-                    check_pat_1st = find_num('top')  # 우선 목록의 첫번째 환자 번호 확인
-                    check_pat_last = find_num('bottom')  # 우선 목록의 마지막 환자 번호 확인
-                    # print('스크롤 후 첫번째환자번호:', check_pat_1st, '마지막환자번호:', check_pat_last)
-
-                    # print('pat_y:', pat_y)
-                    click_position = 41 - check_pat_1st
-
-                    # print('40_click_position:', click_position)
-                    pat_y = 440+ (21 * (click_position))
-                    # print('pat_y', pat_y)
-                    t.sleep(0.1)
-
-                    pag.doubleClick(pat_x, pat_y)
-                    print(pat_no, '번째 환자 클릭했어요.5')
-
-                if (pat_no > 40):
-                    check_pat_2nd = find_num('top')     # 현재 목록 첫번째에 있는 환자번호 확인
-                    # print('check_pat_1st:', check_pat_1st, ', check_pat_2nd:', check_pat_2nd)
-
-                    if (check_pat_1st == check_pat_2nd):
-                        # print('click_position:', click_position)
-                        # print('스크롤 확인용. 첫번째 환자번호 같음: ', check_pat_2nd)
-                        pag.doubleClick(pat_x, pat_y)
-                        print(pat_no, '번째 환자 클릭했어요.6')
-                    else:
-                        # print('click_position:', click_position)
-                        # check_pat_2ndtime = find_num('top')
-                        # print('스크롤 확인용. 첫번째 환자번호 달라서 내림: ', check_pat_2nd)
-                        Updown('down')
-                        Updown('down')
-                        t.sleep(0.1)
-                        Updown('down')  # 두번 다운다운!
-                        pag.doubleClick(pat_x, pat_y)
-                        print(pat_no, '번째 환자 클릭했어요.')
-#여기까지
-
-                # print('현재첫번째환자번호:', check_pat_2nd, '스크롤후?:', check_pat_1st)
-                if (pat_no > 23):
+                if (40> pat_no > 23):
                     check_pat_2nd = find_num('top')     # 현재 목록 첫번째에 있는 환자번호 확인
                     # print('check_pat_1st:', check_pat_1st, ', check_pat_2nd:', check_pat_2nd)
                     if (check_pat_1st == check_pat_2nd):
                         # print('click_position:', click_position)
                         # print('스크롤 확인. 첫번째 환자번호 같음: ', check_pat_2nd)
                         pag.doubleClick(pat_x, pat_y)
-                        print(pat_no, '번째 환자 클릭했어요.3')
+                        print(pat_no, '번째 환자')
                         # t.sleep(0.5)
 
                     else:
@@ -740,64 +690,103 @@ def click_pat():
                         # print('스크롤 확인. 첫번째 환자번호 달라서 내림: ', check_pat_2nd)
                         Updown('down')
                         pag.doubleClick(pat_x, pat_y)
-                        print(pat_no, '번째 환자 클릭했어요.')
+                        print(pat_no, '번째 환자')
                         # t.sleep(0.5)
 
+                if (pat_no == 40):  # 23/45번째 환자 끝나고 나면
+                    Updown('up')  # 스크롤을 올려요~ 18명정도
+                    Updown('up')  # 스크롤을 올려요~ 18명정도
+                    Updown('up')  # 스크롤을 올려요~ 18명정도
+                    Updown('down')  # 스크롤을 내려요~ 18명정도
+                    Updown('down')  # 스크롤을 내려요~ 18명정도
 
-                # if (pat_no == 40):  # 23/45번째 환자 끝나고 나면
-                #     Updown('up')  # 스크롤을 올려요~ 18명정도
-                #     Updown('up')  # 스크롤을 올려요~ 18명정도
-                #     Updown('up')  # 스크롤을 올려요~ 18명정도
-                #     Updown('down')  # 스크롤을 내려요~ 18명정도
-                #     Updown('down')  # 스크롤을 내려요~ 18명정도
-                #
-                #     check_pat_1st = find_num('top')  # 우선 목록의 첫번째 환자 번호 확인
-                #     check_pat_last = find_num('bottom')  # 우선 목록의 마지막 환자 번호 확인
-                #     # print('스크롤 후 첫번째환자번호:', check_pat_1st, '마지막환자번호:', check_pat_last)
-                #
-                #     # print('pat_y:', pat_y)
-                #     click_position = 41 - check_pat_1st
-                #
-                #     # print('40_click_position:', click_position)
-                #     pat_y = 440+ (21 * (click_position))
-                #     # print('pat_y', pat_y)
-                #     t.sleep(0.1)
-                #
-                #     pag.doubleClick(pat_x, pat_y)
-                #     print(pat_no, '번째 환자 클릭했어요.5')
-                #
-                # if (pat_no > 40):
-                #     check_pat_2nd = find_num('top')     # 현재 목록 첫번째에 있는 환자번호 확인
-                #     # print('check_pat_1st:', check_pat_1st, ', check_pat_2nd:', check_pat_2nd)
-                #
-                #     if (check_pat_1st == check_pat_2nd):
-                #         # print('click_position:', click_position)
-                #         # print('스크롤 확인용. 첫번째 환자번호 같음: ', check_pat_2nd)
-                #         pag.doubleClick(pat_x, pat_y)
-                #         print(pat_no, '번째 환자 클릭했어요.6')
-                #     else:
-                #         # print('click_position:', click_position)
-                #         # check_pat_2ndtime = find_num('top')
-                #         # print('스크롤 확인용. 첫번째 환자번호 달라서 내림: ', check_pat_2nd)
-                #         Updown('down')
-                #         Updown('down')
-                #         t.sleep(0.1)
-                #         Updown('down')  # 두번 다운다운!
-                #         pag.doubleClick(pat_x, pat_y)
-                #         print(pat_no, '번째 환자 클릭했어요.7')
+                    check_pat_1st = find_num('top')  # 우선 목록의 첫번째 환자 번호 확인
+                    # check_pat_last = find_num('bottom')  # 우선 목록의 마지막 환자 번호 확인
+                    # print('스크롤 후 첫번째환자번호:', check_pat_1st, '마지막환자번호:', check_pat_last)
+
+                    # print('pat_y:', pat_y)
+                    click_position = 40 - check_pat_1st
+
+                    # print('40_click_position:', click_position)
+                    pat_y = 440+ (21 * (click_position))
+                    # print('pat_y', pat_y)
+                    # t.sleep(0.1)
+
+                    pag.doubleClick(pat_x, pat_y)
+                    print(pat_no, '번째 환자')
+
+                if (50> pat_no > 40):
+                    check_pat_2nd = find_num('top')     # 현재 목록 첫번째에 있는 환자번호 확인
+                    # print('check_pat_1st:', check_pat_1st, ', check_pat_2nd:', check_pat_2nd)
+
+                    if (check_pat_1st == check_pat_2nd):
+                        # print('click_position:', click_position)
+                        # print('스크롤 확인용. 첫번째 환자번호 같음: ', check_pat_2nd)
+                        pag.doubleClick(pat_x, pat_y)
+                        print(pat_no, '번째 환자')
+                    else:
+                        # print('click_position:', click_position)
+                        # check_pat_2ndtime = find_num('top')
+                        # print('스크롤 확인용. 첫번째 환자번호 달라서 내림: ', check_pat_2nd)
+                        Updown('down')
+                        Updown('down')
+                        # t.sleep(0.1)
+                        Updown('down')  # 두번 다운다운!
+                        pag.doubleClick(pat_x, pat_y)
+                        print(pat_no, '번째 환자')
+
+                if (pat_no == 58):  # 일정순번 환자 끝나고 나면
+                    Updown('up')  # 스크롤을 올려요~ 18명정도
+                    Updown('up')  # 스크롤을 올려요~ 18명정도
+                    Updown('up')  # 스크롤을 올려요~ 18명정도
+                    Updown('down')  # 스크롤을 내려요~ 18명정도
+                    Updown('down')  # 스크롤을 내려요~ 18명정도
+                    Updown('down')  # 스크롤을 내려요~ 18명정도
+                    check_pat_1st = find_num('top')  # 우선 목록의 첫번째 환자 번호 확인
+                    # check_pat_last = find_num('bottom')  # 우선 목록의 마지막 환자 번호 확인
+                    # print('스크롤 후 첫번째환자번호:', check_pat_1st, '마지막환자번호:', check_pat_last)
+                    # print('pat_y:', pat_y)
+                    click_position = 57 - check_pat_1st
+                    # print('40_click_position:', click_position)
+                    pat_y = 440+ (21 * (click_position))
+                    # print('pat_y', pat_y)
+                    t.sleep(0.1)
+                    pag.doubleClick(pat_x, pat_y)
+                    print(pat_no, '번째 환자7')
+
+                if (pat_no > 58):
+                    check_pat_2nd = find_num('top')     # 현재 목록 첫번째에 있는 환자번호 확인
+                    # print('check_pat_1st:', check_pat_1st, ', check_pat_2nd:', check_pat_2nd)
+                    if (check_pat_1st == check_pat_2nd):
+                        # print('click_position:', click_position)
+                        # print('스크롤 확인용. 첫번째 환자번호 같음: ', check_pat_2nd)
+                        pag.doubleClick(pat_x, pat_y)
+                        print(pat_no, '번째 환자6')
+                    else:
+                        # print('click_position:', click_position)
+                        # check_pat_2ndtime = find_num('top')
+                        # print('스크롤 확인용. 첫번째 환자번호 달라서 내림: ', check_pat_2nd)
+                        Updown('down')
+                        Updown('down')
+                        Updown('down')
+                        # t.sleep(0.1)
+                        Updown('down')  # 세번 다운다운!
+                        pag.doubleClick(pat_x, pat_y)
+                        print(pat_no, '번째 환자')
 
                 # dur에러 확인, 청구 돌리고, 다시 화면정리  - 잠시 멈춰요
-                t.sleep(1)
+                t.sleep(1.4)
                 dur_clear()
-                t.sleep(2)
+                t.sleep(0.1)
                 if (adm_check() == 2):  # 외래환자면?
                     Chunggoo_not_adm()
                 elif (adm_check() == 1): # 입원환자면?
                     Chunggoo_adm()
                 elif (adm_check() == 0):
-                    print('error!!!')
-                    break
-                t.sleep(0.5)
+                    print('외래/입원이 안보여')
+                    dur_clear()
+                    continue
+                t.sleep(0.1)
                 pat_clear()
                 t.sleep(0.1)
                 click_position = click_position + 1
@@ -811,6 +800,7 @@ def dur_clear():     # 에러메시지 나타나면 확인확인클릭클릭
         return
     dur_check = pag.locateCenterOnScreen('dur_check.png', confidence=0.9)
     err_check = pag.locateCenterOnScreen('err2.png', confidence=0.8, region=(745,335,650,500))
+    err_check2 = pag.locateCenterOnScreen('err4.png', confidence=0.8, region=(0, 55, 1900, 959)) # 본인부담금 관련 특정기호 - 취소버튼
     err_1_check = pag.locateCenterOnScreen('err_1_check.png', confidence=0.9)
     save_yes = pag.locateCenterOnScreen('save_yes.png', confidence=0.9)
     if (dur_check) or (err_1_check):
@@ -819,24 +809,29 @@ def dur_clear():     # 에러메시지 나타나면 확인확인클릭클릭
             pag.click(dur_check)
         else:
             pag.click(err_1_check)
-        t.sleep(0.5)
+        t.sleep(0.3)
 
     if (err_check):
         print('err 확인창!')
         pag.click(err_check)
-        t.sleep(0.5)
+        t.sleep(0.3)
+
+    if (err_check2):
+        print('err 확인창!')
+        pag.click(err_check2)
+        t.sleep(0.3)
 
     if (save_yes):
         print('save!')
         pag.click(save_yes)
-        t.sleep(0.5)
+        t.sleep(0.3)
 
 def click_date(day_day, what_week):       # 화면 맨오른쪽 위 펼쳐져있는 달력에서 날짜 클릭하기
     # 달력에서 날짜 클릭하기 시작
     pag.doubleClick(1631 + ((day_day + 1) % 7) * 40, 145 + (what_week * 25))  # 날짜 더블클릭!
     # print('몇번째요일?', day_day+1, '몇번째주?', what_week)
     # print('달력 클릭위치는:', 1631 + ((day_day + 1) % 7) * 40, 155 + (what_week * 25))
-    t.sleep(1)
+    t.sleep(0.1)
     return
 
 def find_num(where):
@@ -859,6 +854,7 @@ def find_num(where):
     cond_num_9 = pag.locateCenterOnScreen('9.PNG', confidence=0.92, region=(x, y, 68, 34))
     cond_num_10 = pag.locateCenterOnScreen('10.PNG', confidence=0.92, region=(x, y, 68, 34))
     cond_num_11 = pag.locateCenterOnScreen('11.PNG', confidence=0.92, region=(x, y, 68, 34))
+    cond_num_11_1 = pag.locateCenterOnScreen('11-1.PNG', confidence=0.96, region=(x, y, 68 + 50, 34 + 30))
     cond_num_12 = pag.locateCenterOnScreen('12.PNG', confidence=0.92, region=(x, y, 68, 34))
     cond_num_13 = pag.locateCenterOnScreen('13.PNG', confidence=0.92, region=(x, y, 68, 34))
     cond_num_14 = pag.locateCenterOnScreen('14.PNG', confidence=0.92, region=(x, y, 68, 34))
@@ -903,29 +899,28 @@ def find_num(where):
     cond_num_53 = pag.locateCenterOnScreen('53.PNG', confidence=0.92, region=(x, y, 68, 34))
     cond_num_54 = pag.locateCenterOnScreen('54.PNG', confidence=0.92, region=(x, y, 68, 34))
     cond_num_55 = pag.locateCenterOnScreen('55.PNG', confidence=0.92, region=(x, y, 68, 34))
-    cond_num_56 = pag.locateCenterOnScreen('56.PNG', confidence=0.92, region=(x, y, 68, 34))
-    cond_num_57 = pag.locateCenterOnScreen('57.PNG', confidence=0.92, region=(x, y, 68, 34))
-    cond_num_58 = pag.locateCenterOnScreen('58.PNG', confidence=0.92, region=(x, y, 68, 34))
-    cond_num_59 = pag.locateCenterOnScreen('59.PNG', confidence=0.92, region=(x, y, 68, 34))
-    cond_num_60 = pag.locateCenterOnScreen('60.PNG', confidence=0.92, region=(x, y, 68, 34))
-    cond_num_61 = pag.locateCenterOnScreen('61.PNG', confidence=0.92, region=(x, y, 68, 34))
-    cond_num_62 = pag.locateCenterOnScreen('62.PNG', confidence=0.92, region=(x, y, 68, 34))
-    cond_num_63 = pag.locateCenterOnScreen('63.PNG', confidence=0.92, region=(x, y, 68, 34))
-    cond_num_64 = pag.locateCenterOnScreen('64.PNG', confidence=0.92, region=(x, y, 68, 34))
-    cond_num_65 = pag.locateCenterOnScreen('65.PNG', confidence=0.92, region=(x, y, 68, 34))
-    cond_num_66 = pag.locateCenterOnScreen('66.PNG', confidence=0.92, region=(x, y, 68, 34))
-    cond_num_67 = pag.locateCenterOnScreen('67.PNG', confidence=0.92, region=(x, y, 68, 34))
-    cond_num_68 = pag.locateCenterOnScreen('68.PNG', confidence=0.92, region=(x, y, 68, 34))
-    cond_num_69 = pag.locateCenterOnScreen('69.PNG', confidence=0.92, region=(x, y, 68, 34))
-    cond_num_70 = pag.locateCenterOnScreen('70.PNG', confidence=0.92, region=(x, y, 68, 34))
-    cond_num_71 = pag.locateCenterOnScreen('71.PNG', confidence=0.92, region=(x, y, 68, 34))
-    cond_num_72 = pag.locateCenterOnScreen('72.PNG', confidence=0.92, region=(x, y, 68, 34))
-    cond_num_73 = pag.locateCenterOnScreen('73.PNG', confidence=0.92, region=(x, y, 68, 34))
-    cond_num_74 = pag.locateCenterOnScreen('74.PNG', confidence=0.92, region=(x, y, 68, 34))
-    cond_num_75 = pag.locateCenterOnScreen('75.PNG', confidence=0.92, region=(x, y, 68, 34))
-    cond_num_76 = pag.locateCenterOnScreen('76.PNG', confidence=0.92, region=(x, y, 68, 34))
-    cond_num_77 = pag.locateCenterOnScreen('77.PNG', confidence=0.92, region=(x, y, 68, 34))
-
+    # cond_num_56 = pag.locateCenterOnScreen('56.PNG', confidence=0.92, region=(x, y, 68, 34))
+    # cond_num_57 = pag.locateCenterOnScreen('57.PNG', confidence=0.92, region=(x, y, 68, 34))
+    # cond_num_58 = pag.locateCenterOnScreen('58.PNG', confidence=0.92, region=(x, y, 68, 34))
+    # cond_num_59 = pag.locateCenterOnScreen('59.PNG', confidence=0.92, region=(x, y, 68, 34))
+    # cond_num_60 = pag.locateCenterOnScreen('60.PNG', confidence=0.92, region=(x, y, 68, 34))
+    # cond_num_61 = pag.locateCenterOnScreen('61.PNG', confidence=0.92, region=(x, y, 68, 34))
+    # cond_num_62 = pag.locateCenterOnScreen('62.PNG', confidence=0.92, region=(x, y, 68, 34))
+    # cond_num_63 = pag.locateCenterOnScreen('63.PNG', confidence=0.92, region=(x, y, 68, 34))
+    # cond_num_64 = pag.locateCenterOnScreen('64.PNG', confidence=0.92, region=(x, y, 68, 34))
+    # cond_num_65 = pag.locateCenterOnScreen('65.PNG', confidence=0.92, region=(x, y, 68, 34))
+    # cond_num_66 = pag.locateCenterOnScreen('66.PNG', confidence=0.92, region=(x, y, 68, 34))
+    # cond_num_67 = pag.locateCenterOnScreen('67.PNG', confidence=0.92, region=(x, y, 68, 34))
+    # cond_num_68 = pag.locateCenterOnScreen('68.PNG', confidence=0.92, region=(x, y, 68, 34))
+    # cond_num_69 = pag.locateCenterOnScreen('69.PNG', confidence=0.92, region=(x, y, 68, 34))
+    # cond_num_70 = pag.locateCenterOnScreen('70.PNG', confidence=0.92, region=(x, y, 68, 34))
+    # cond_num_71 = pag.locateCenterOnScreen('71.PNG', confidence=0.92, region=(x, y, 68, 34))
+    # cond_num_72 = pag.locateCenterOnScreen('72.PNG', confidence=0.92, region=(x, y, 68, 34))
+    # cond_num_73 = pag.locateCenterOnScreen('73.PNG', confidence=0.92, region=(x, y, 68, 34))
+    # cond_num_74 = pag.locateCenterOnScreen('74.PNG', confidence=0.92, region=(x, y, 68, 34))
+    # cond_num_75 = pag.locateCenterOnScreen('75.PNG', confidence=0.92, region=(x, y, 68, 34))
+    # cond_num_76 = pag.locateCenterOnScreen('76.PNG', confidence=0.92, region=(x, y, 68, 34))
+    # cond_num_77 = pag.locateCenterOnScreen('77.PNG', confidence=0.92, region=(x, y, 68, 34))
     if (cond_num_1):
         return 1
     if (cond_num_2):
@@ -946,7 +941,7 @@ def find_num(where):
         return 9
     if (cond_num_10):
         return 10
-    if (cond_num_11):
+    if (cond_num_11) or (cond_num_11_1):
         return 11
     if (cond_num_12):
         return 12
@@ -1036,50 +1031,50 @@ def find_num(where):
         return 54
     if (cond_num_55):
         return 55
-    if (cond_num_56):
-        return 56
-    if (cond_num_57):
-        return 57
-    if (cond_num_58):
-        return 58
-    if (cond_num_59):
-        return 59
-    if (cond_num_60):
-        return 60
-    if (cond_num_61):
-        return 61
-    if (cond_num_62):
-        return 62
-    if (cond_num_63):
-        return 63
-    if (cond_num_64):
-        return 64
-    if (cond_num_65):
-        return 65
-    if (cond_num_66):
-        return 66
-    if (cond_num_67):
-        return 67
-    if (cond_num_68):
-        return 68
-    if (cond_num_69):
-        return 69
-    if (cond_num_70):
-        return 70
-    if (cond_num_71):
-        return 71
-    if (cond_num_72):
-        return 72
-    if (cond_num_73):
-        return 73
-    if (cond_num_74):
-        return 74
-    if (cond_num_75):
-        return 75
-    if (cond_num_76):
-        return 76
-    if (cond_num_77):
-        return 77
+    # if (cond_num_56):
+    #     return 56
+    # if (cond_num_57):
+    #     return 57
+    # if (cond_num_58):
+    #     return 58
+    # if (cond_num_59):
+    #     return 59
+    # if (cond_num_60):
+    #     return 60
+    # if (cond_num_61):
+    #     return 61
+    # if (cond_num_62):
+    #     return 62
+    # if (cond_num_63):
+    #     return 63
+    # if (cond_num_64):
+    #     return 64
+    # if (cond_num_65):
+    #     return 65
+    # if (cond_num_66):
+    #     return 66
+    # if (cond_num_67):
+    #     return 67
+    # if (cond_num_68):
+    #     return 68
+    # if (cond_num_69):
+    #     return 69
+    # if (cond_num_70):
+    #     return 70
+    # if (cond_num_71):
+    #     return 71
+    # if (cond_num_72):
+    #     return 72
+    # if (cond_num_73):
+    #     return 73
+    # if (cond_num_74):
+    #     return 74
+    # if (cond_num_75):
+    #     return 75
+    # if (cond_num_76):
+    #     return 76
+    # if (cond_num_77):
+    #     return 77
     else:
         return 0
 
@@ -1199,7 +1194,7 @@ while True:                # 여기서부터 돌립니다
 
         # 달력의 년, 월 확인
         cur_year = hiq_year_check()   # 목표년도인지 확인
-        print('cur_year:', cur_year)
+        # print('cur_year:', cur_year)
         if not (yy == cur_year):
             hiq_click_year(yy, cur_year)   # 아니면 목표년도로 돌려!
 
@@ -1214,7 +1209,7 @@ while True:                # 여기서부터 돌립니다
         # print(what_week-1, '번째 주의 ', day_day, '째날이예요')
         click_date(day_day, what_week-1)
 
-        t.sleep(0.5)
+        t.sleep(0.2)
 
         dur_clear()
         click_pat()
